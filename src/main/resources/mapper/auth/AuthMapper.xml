@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.btone.project.api.auth.mapper.AuthMapper">
+    <select id="checkId" parameterType="com.btone.project.api.auth.vo.AuthVO">
+		SELECT COUNT(*)
+		  FROM TB_ACCOUNT
+		 WHERE USER_ID = #{userId}
+    </select>
+
+    <insert id="signup" parameterType="com.btone.project.api.auth.vo.AuthVO">
+		INSERT INTO TB_ACCOUNT (
+			USER_ID
+			, PWD
+			, ACTV_NM
+			, AGREE_YN
+			, REGR
+			, REG_DATE
+			, MODR
+			, MOD_DATE
+		) VALUES (
+			#{userId}
+			, #{pwd}
+			, #{actvNm}
+			, #{agreeYn}
+			, #{userId}
+			, CURRENT_TIMESTAMP
+			, #{userId}
+			, CURRENT_TIMESTAMP
+		)
+	</insert>
+
+	<update id="edit" parameterType="com.btone.project.api.auth.vo.AuthVO">
+		UPDATE TB_ACCOUNT
+		   SET PWD = #{pwd}
+		       , ACTV_NM = #{actvNm}
+		       , MODR = #{userId}
+		       , MOD_DATE = CURRENT_TIMESTAMP
+		 WHERE USER_SN = #{userSn}
+	</update>
+
+	<update id="cancel" parameterType="com.btone.project.api.auth.vo.AuthVO">
+		UPDATE TB_ACCOUNT
+		   SET DEL_YN = 'Y'
+		       , MODR = #{userId}
+		       , MOD_DATE = CURRENT_TIMESTAMP
+		 WHERE USER_SN = #{userSn}
+	</update>
+
+	<select id="lookup" parameterType="com.btone.project.api.auth.vo.AuthVO">
+		SELECT USER_SN
+			   , USER_ID
+			   , PWD
+			   , ACTV_NM
+			   , AGREE_YN
+			   , ROLE_CD
+			   , RS_PWD_YN
+			   , TMP_PWD
+			   , REGR
+			   , REG_DATE
+			   , MODR
+			   , MOD_DATE
+			   , DEL_YN
+		  FROM TB_ACCOUNT
+		 WHERE 1=1
+		<if test='lookupType == "all"'>
+		   AND DEL_YN = #{delYn}
+		</if>
+		<if test='lookupType == "userSn"'>
+		   AND DEL_YN = 'N'
+		   AND USER_SN = #{userSn}
+		</if>
+		<if test='lookupType == "userId"'>
+		   AND USER_ID = #{userId}
+		</if>
+    </select>
+</mapper>
