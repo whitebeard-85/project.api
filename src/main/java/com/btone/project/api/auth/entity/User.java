@@ -4,7 +4,6 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.btone.project.api.common.entity.BaseTimeEntity;
 import com.btone.project.api.common.util.PasswordConverter;
@@ -68,27 +67,4 @@ public class User extends BaseTimeEntity {
     private String rsPwdYn;
 
     private String tmpPwd;
-
-    // 유저 권한 설정 메소드
-    public void authorizeUser() {
-        this.role = Role.USER;
-    }
-
-    // 비밀번호 암호화 메소드
-    public void passwordEncode(PasswordEncoder passwordEncoder) {
-        this.pwd = passwordEncoder.encode(this.pwd);
-    }
-
-    //== 유저 필드 업데이트 ==//
-    public void updateActvNm(String updateActvNm) {
-        this.actvNm = updateActvNm;
-    }
-
-    public void updatePassword(String updatePassword, PasswordEncoder passwordEncoder) {
-        this.pwd = passwordEncoder.encode(updatePassword);
-    }
-
-    public void updateRefreshToken(String updateRefreshToken) {
-        this.refreshToken = updateRefreshToken;
-    }
 }
