@@ -1,0 +1,32 @@
+{"properties": [
+  {
+    "name": "jwt.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.secret-key'"
+  },
+  {
+    "name": "jwt.access.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.access.expiration'"
+  },
+  {
+    "name": "jwt.access.header",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.access.header'"
+  },
+  {
+    "name": "jwt.refresh.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.refresh.expiration'"
+  },
+  {
+    "name": "jwt.refresh.header",
+    "type": "java.lang.String",
+    "description": "A description for 'jwt.refresh.header'"
+  },
+  {
+    "name": "hibernate",
+    "type": "java.lang.String",
+    "description": "A description for 'hibernate'"
+  }
+]}
