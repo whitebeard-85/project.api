@@ -10,6 +10,7 @@ import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.auth.entity.Role;
 import com.btone.project.api.auth.entity.User;
@@ -18,7 +19,6 @@ import com.btone.project.api.auth.specification.UserSpecification;
 import com.btone.project.api.auth.vo.AuthVO;
 import com.btone.project.api.common.model.ResponseMessage;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -51,7 +51,7 @@ public class AuthService {
 	public ResponseMessage checkId(AuthVO input, Map<String, Object> searchKeys) {
 		try {
 			searchKeys.put("userId", input.getUserId());
-			List<User> list = userRepository.findAll(UserSpecification.findByUserId(searchKeys));
+			List<User> list = userRepository.findAll(UserSpecification.searchUser(searchKeys));
 
 			if(list.size() > 0) {
 				if("Y".equals(list.get(0).getDelYn())) {
@@ -70,7 +70,7 @@ public class AuthService {
 	public ResponseMessage signup(AuthVO input, Map<String, Object> searchKeys) {
 		try {
 			searchKeys.put("userId", input.getUserId());
-			List<User> list = userRepository.findAll(UserSpecification.findByUserId(searchKeys));
+			List<User> list = userRepository.findAll(UserSpecification.searchUser(searchKeys));
 
 			if(list.size() > 0) {
 				if("Y".equals(list.get(0).getDelYn())) {
@@ -99,7 +99,7 @@ public class AuthService {
 		try {
 			searchKeys.put("delYn", "N");
 			searchKeys.put("userSn", input.getUserSn());
-			Optional<User> optionalUser = userRepository.findOne(UserSpecification.findByUserId(searchKeys));
+			Optional<User> optionalUser = userRepository.findOne(UserSpecification.searchUser(searchKeys));
 
 			if(optionalUser.isEmpty()) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.notexists"));
@@ -119,7 +119,7 @@ public class AuthService {
 		try {
 			searchKeys.put("delYn", "N");
 			searchKeys.put("userSn", input.getUserSn());
-			Optional<User> optionalUser = userRepository.findOne(UserSpecification.findByUserId(searchKeys));
+			Optional<User> optionalUser = userRepository.findOne(UserSpecification.searchUser(searchKeys));
 
 			if(optionalUser.isEmpty()) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.notexists"));
@@ -137,7 +137,7 @@ public class AuthService {
 	public ResponseMessage lookup(AuthVO input, Map<String, Object> searchKeys) {
 		List<User> list = new ArrayList<>();
 		try {
-			list = userRepository.findAll(UserSpecification.findByUserId(searchKeys));
+			list = userRepository.findAll();
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.notexists"));

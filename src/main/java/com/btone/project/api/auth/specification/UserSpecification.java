@@ -14,7 +14,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 
 public class UserSpecification {
-	public static Specification<User> findByUserId(Map<String, Object> searchKey) {
+	public static Specification<User> searchUser(Map<String, Object> searchKey) {
         return new Specification<User>() {
             /**
 			 *
