@@ -5,6 +5,8 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.btone.project.api.auth.enums.Role;
+import com.btone.project.api.auth.enums.SocialType;
 import com.btone.project.api.common.entity.BaseTimeEntity;
 import com.btone.project.api.common.util.PasswordConverter;
 

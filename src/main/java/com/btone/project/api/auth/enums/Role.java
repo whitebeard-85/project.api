@@ -1,4 +1,4 @@
-package com.btone.project.api.auth.entity;
+package com.btone.project.api.auth.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

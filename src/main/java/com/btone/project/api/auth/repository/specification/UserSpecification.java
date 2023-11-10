@@ -1,4 +1,4 @@
-package com.btone.project.api.auth.specification;
+package com.btone.project.api.auth.repository.specification;
 
 import java.util.ArrayList;
 import java.util.List;
