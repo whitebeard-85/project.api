@@ -22,6 +22,17 @@ import com.btone.project.api.common.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName   : com.btone.project.api.auth.service
+* @fileName      : AuthService.java
+* @author        : 오수병
+* @date          : 2023.11.10
+* @description   : 인증관리 서비스
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2023.11.10        오수병                최초 생성
+*/
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -31,6 +42,15 @@ public class AuthService {
 	private final UserRepository userRepository;
 	private final MessageSourceAccessor messageSource;
 
+	/**
+	* @methodName  : account
+	* @author      : 오수병
+	* @date        : 2023.11.10
+	* @description : 회원관리
+	* @param method
+	* @param input
+	* @return
+	*/
 	public ResponseMessage account(String method, AuthVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
@@ -45,6 +65,16 @@ public class AuthService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"));
 	}
 
+	/**
+	* @methodName  : signup
+	* @author      : 오수병
+	* @date        : 2023.11.10
+	* @description : 회원가입, 아이디중복체크
+	* @param method
+	* @param input
+	* @param searchKeys
+	* @return
+	*/
 	public ResponseMessage signup(String method, AuthVO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("account.signup.success");
 		try {
@@ -78,6 +108,16 @@ public class AuthService {
 		return ResponseMessage.ok(null, message);
 	}
 
+	/**
+	* @methodName  : edit
+	* @author      : 오수병
+	* @date        : 2023.11.10
+	* @description : 회원정보수정, 회원탈퇴
+	* @param method
+	* @param input
+	* @param searchKeys
+	* @return
+	*/
 	public ResponseMessage edit(String method, AuthVO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("account.edit.success");
 		try {
@@ -105,6 +145,15 @@ public class AuthService {
 		return ResponseMessage.ok(null, message);
 	}
 
+	/**
+	* @methodName  : search
+	* @author      : 오수병
+	* @date        : 2023.11.10
+	* @description : 회원정보조회
+	* @param input
+	* @param searchKeys
+	* @return
+	*/
 	public ResponseMessage search(AuthVO input, Map<String, Object> searchKeys) {
 		List<User> list = new ArrayList<>();
 		try {
