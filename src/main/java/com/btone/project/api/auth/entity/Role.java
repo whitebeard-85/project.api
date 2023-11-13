@@ -18,6 +18,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+* @packageName   : com.btone.project.api.auth.entity
+* @fileName      : Role.java
+* @author        : 오수병
+* @date          : 2023.11.13
+* @description   : 권한정보 엔티티
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2023.11.13        오수병                최초 생성
+*/
 @Getter //lombok getter
 @Setter //lombok setter
 @NoArgsConstructor

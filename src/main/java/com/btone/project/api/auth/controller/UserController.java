@@ -32,7 +32,7 @@ public class UserController {
 	private final UserService service;
 
 	/**
-	* @methodName  : account
+	* @methodName  : methods
 	* @author      : 오수병
 	* @date        : 2023.11.10
 	* @param method

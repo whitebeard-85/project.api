@@ -20,6 +20,28 @@ import com.btone.project.api.common.specification.CommonSpecification;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+* @packageName   : com.btone.project.api.auth.service
+* @fileName      : RoleService.java
+* @author        : 오수병
+* @date          : 2023.11.13
+* @description   : 권한관리 서비스
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2023.11.13        오수병                최초 생성
+*/
+/**
+* @packageName   : com.btone.project.api.auth.service
+* @fileName      : RoleService.java
+* @author        : 오수병
+* @date          : 2023.11.13
+* @description   :
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2023.11.13        오수병                최초 생성
+*/
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -28,6 +50,15 @@ public class RoleService {
 	private final RoleRepository repository;
 	private final MessageSourceAccessor messageSource;
 
+	/**
+	* @methodName  : methods
+	* @author      : 오수병
+	* @date        : 2023.11.13
+	* @description : 권한관리
+	* @param method
+	* @param input
+	* @return
+	*/
 	public ResponseMessage methods(String method, AuthVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
@@ -42,6 +73,15 @@ public class RoleService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"));
 	}
 
+	/**
+	* @methodName  : create
+	* @author      : 오수병
+	* @date        : 2023.11.13
+	* @description : 권한등록
+	* @param input
+	* @param searchKeys
+	* @return
+	*/
 	public ResponseMessage create(AuthVO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("role.create.success");
 		try {
@@ -71,6 +111,16 @@ public class RoleService {
 		return ResponseMessage.ok(null, message);
 	}
 
+	/**
+	* @methodName  : ud
+	* @author      : 오수병
+	* @date        : 2023.11.13
+	* @description : 권한수정, 삭제
+	* @param method
+	* @param input
+	* @param searchKeys
+	* @return
+	*/
 	public ResponseMessage ud(String method, AuthVO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("role.update.success");
 		Role role = null;
@@ -99,6 +149,15 @@ public class RoleService {
 		return ResponseMessage.ok(null, message);
 	}
 
+	/**
+	* @methodName  : search
+	* @author      : 오수병
+	* @date        : 2023.11.13
+	* @description : 권한조회
+	* @param input
+	* @param searchKeys
+	* @return
+	*/
 	public ResponseMessage search(AuthVO input, Map<String, Object> searchKeys) {
 		List<Role> list = new ArrayList<>();
 		try {
