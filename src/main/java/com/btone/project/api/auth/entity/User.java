@@ -68,5 +68,6 @@ public class User extends BaseTimeEntity {
     @ColumnDefault("'N'")
     private String rsPwdYn;
 
+    @Convert(converter = PasswordConverter.class)
     private String tmpPwd;
 }

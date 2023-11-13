@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum Method {
 	// Account
-	CHECKID("check-id"), SIGNUP("sign-up"), EDIT("edit"), CANCEL("cancel"), SEARCH("search");
+	CHECKID("check-id"), SIGNUP("sign-up"), EDIT("edit"), CANCEL("cancel"), SEARCH("search"), RESETPASSWORD("reset-password");
 
 	private final String key;
 }
