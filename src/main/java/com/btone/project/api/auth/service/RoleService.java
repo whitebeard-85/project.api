@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.btone.project.api.auth.entity.Role;
 import com.btone.project.api.auth.enums.Method;
 import com.btone.project.api.auth.repository.RoleRepository;
-import com.btone.project.api.auth.vo.AuthVO;
+import com.btone.project.api.auth.vo.RoleVO;
 import com.btone.project.api.common.model.ResponseMessage;
 import com.btone.project.api.common.specification.CommonSpecification;
 
@@ -59,7 +59,7 @@ public class RoleService {
 	* @param input
 	* @return
 	*/
-	public ResponseMessage methods(String method, AuthVO input) {
+	public ResponseMessage methods(String method, RoleVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(Method.CREATE.getKey().equals(method)) {
@@ -82,7 +82,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage create(AuthVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage create(RoleVO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("role.create.success");
 		try {
 			searchKeys.put("roleCd", input.getRoleCd());
@@ -121,7 +121,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage ud(String method, AuthVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage ud(String method, RoleVO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("role.update.success");
 		Role role = null;
 		try {
@@ -158,7 +158,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage search(AuthVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage search(RoleVO input, Map<String, Object> searchKeys) {
 		List<Role> list = new ArrayList<>();
 		try {
 			list = repository.findAll();

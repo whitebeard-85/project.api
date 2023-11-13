@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.btone.project.api.auth.service.RoleService;
-import com.btone.project.api.auth.vo.AuthVO;
+import com.btone.project.api.auth.vo.RoleVO;
 import com.btone.project.api.common.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -35,13 +35,13 @@ public class RoleController {
 	* @methodName  : methods
 	* @author      : 오수병
 	* @date        : 2023.11.13
-	* @description : 
+	* @description :
 	* @param method
 	* @param input
 	* @return
 	*/
 	@PostMapping("/{method}")
-	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody AuthVO input) {
+	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody RoleVO input) {
 		ResponseMessage response = service.methods(method, input);
 		return ResponseEntity.ok(response);
 	}

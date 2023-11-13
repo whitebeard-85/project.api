@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.btone.project.api.auth.service.UserService;
-import com.btone.project.api.auth.vo.AuthVO;
+import com.btone.project.api.auth.vo.UserVO;
 import com.btone.project.api.common.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,7 @@ public class UserController {
 	* @return
 	*/
 	@PostMapping("/{method}")
-	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody AuthVO input) {
+	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody UserVO input) {
 		ResponseMessage response = service.methods(method, input);
 		return ResponseEntity.ok(response);
 	}

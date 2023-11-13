@@ -3,7 +3,7 @@ package com.btone.project.api.auth.vo;
 import lombok.Data;
 
 @Data
-public class AuthVO {
+public class UserVO {
 	private Integer userSn;		// 사용자일련번호
 	private String userId;		// 사용자아이디
 	private String pwd;			// 비밀번호
@@ -13,6 +13,4 @@ public class AuthVO {
 	private String tmpPwd;		// 임시비밀번호(비밀번호초기화시 발급)
 	private String delYn;		// 삭제여부
     private String roleCd;
-    private String roleNm;
-    private String roleDesc;
 }
