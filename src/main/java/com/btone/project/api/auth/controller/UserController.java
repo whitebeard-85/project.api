@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.btone.project.api.auth.service.AuthService;
+import com.btone.project.api.auth.service.UserService;
 import com.btone.project.api.auth.vo.AuthVO;
 import com.btone.project.api.common.model.ResponseMessage;
 
@@ -26,10 +26,10 @@ import lombok.RequiredArgsConstructor;
 */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/auth")
-public class AuthController {
+@RequestMapping("/auth/user")
+public class UserController {
 
-	private final AuthService service;
+	private final UserService service;
 
 	/**
 	* @methodName  : account
@@ -39,9 +39,9 @@ public class AuthController {
 	* @param input
 	* @return
 	*/
-	@PostMapping("/account/{method}")
-	public ResponseEntity<?> account(@PathVariable String method, @RequestBody AuthVO input) {
-		ResponseMessage response = service.account(method, input);
+	@PostMapping("/{method}")
+	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody AuthVO input) {
+		ResponseMessage response = service.methods(method, input);
 		return ResponseEntity.ok(response);
 	}
 }

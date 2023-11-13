@@ -9,9 +9,10 @@ public class AuthVO {
 	private String pwd;			// 비밀번호
 	private String actvNm;		// 활동명
 	private String agreeYn;		// 약관동의여부
-	private String role;		// 권한코드
 	private String rsPwdYn;		// 비밀번호초기화여부
 	private String tmpPwd;		// 임시비밀번호(비밀번호초기화시 발급)
 	private String delYn;		// 삭제여부
-    private String lookupType;	// 조회구분
+    private String roleCd;
+    private String roleNm;
+    private String roleDesc;
 }

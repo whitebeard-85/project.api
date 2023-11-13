@@ -7,18 +7,17 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.context.support.MessageSourceAccessor;
-import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.btone.project.api.auth.entity.Role;
 import com.btone.project.api.auth.entity.User;
 import com.btone.project.api.auth.enums.Method;
-import com.btone.project.api.auth.enums.Role;
 import com.btone.project.api.auth.repository.UserRepository;
-import com.btone.project.api.auth.repository.specification.UserSpecification;
 import com.btone.project.api.auth.vo.AuthVO;
 import com.btone.project.api.common.model.ResponseMessage;
+import com.btone.project.api.common.specification.CommonSpecification;
 import com.btone.project.api.common.util.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -37,14 +36,13 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@EnableJpaAuditing
-public class AuthService {
+public class UserService {
 
-	private final UserRepository userRepository;
+	private final UserRepository repository;
 	private final MessageSourceAccessor messageSource;
 
 	/**
-	* @methodName  : account
+	* @methodName  : methods
 	* @author      : 오수병
 	* @date        : 2023.11.10
 	* @description : 회원관리
@@ -52,7 +50,7 @@ public class AuthService {
 	* @param input
 	* @return
 	*/
-	public ResponseMessage account(String method, AuthVO input) {
+	public ResponseMessage methods(String method, AuthVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(Method.CHECKID.getKey().equals(method) || Method.SIGNUP.getKey().equals(method)) {
@@ -77,30 +75,34 @@ public class AuthService {
 	* @return
 	*/
 	public ResponseMessage signup(String method, AuthVO input, Map<String, Object> searchKeys) {
-		String message = messageSource.getMessage("account.signup.success");
+		String message = messageSource.getMessage("user.signup.success");
 		try {
 			searchKeys.put("userId", input.getUserId());
-			List<User> list = userRepository.findAll(UserSpecification.searchUser(searchKeys));
+			List<User> list = repository.findAll(CommonSpecification.searchCondition(searchKeys));
 
 			if(list.size() > 0) {
 				if("Y".equals(list.get(0).getDelYn())) {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.checkid.canceled"));
+					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.canceled"));
 				}else {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.checkid.duplicated"));
+					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.duplicated"));
 				}
 			}
 
 			if(Method.SIGNUP.getKey().equals(method)) {
+				Role role = Role.builder()
+						.roleCd(input.getRoleCd())
+						.build();
+
 				User user = User.builder()
 						.userId(input.getUserId())
 						.pwd(input.getPwd())
 						.actvNm(input.getActvNm())
-						.role(Role.USER)
+						.role(role)
 						.build();
 
-				userRepository.save(user);
+				repository.save(user);
 			}else {
-				message = messageSource.getMessage("account.checkid.success");
+				message = messageSource.getMessage("user.checkid.success");
 			}
 		} catch (Exception e) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
@@ -120,15 +122,15 @@ public class AuthService {
 	* @return
 	*/
 	public ResponseMessage edit(String method, AuthVO input, Map<String, Object> searchKeys) {
-		String message = messageSource.getMessage("account.edit.success");
+		String message = messageSource.getMessage("user.edit.success");
 		User user = null;
 		try {
 			searchKeys.put("delYn", "N");
 			searchKeys.put("userSn", input.getUserSn());
-			Optional<User> optionalUser = userRepository.findOne(UserSpecification.searchUser(searchKeys));
+			Optional<User> optionalUser = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalUser.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"));
 			}
 
 			user = optionalUser.get();
@@ -138,13 +140,13 @@ public class AuthService {
 				user.setPwd(input.getPwd());
 			}else if(Method.CANCEL.getKey().equals(method)){
 				user.setDelYn("Y");
-				message = messageSource.getMessage("account.cancel.success");
+				message = messageSource.getMessage("user.cancel.success");
 			}else if(Method.RESETPASSWORD.getKey().equals(method)) {
 				String tmpPwd = CommonUtils.getRamdomPassword(20);
 				user.setRsPwdYn("Y");
 				user.setTmpPwd(tmpPwd);
 				user.setPwd(tmpPwd);
-				message = messageSource.getMessage("account.reset-password.success");
+				message = messageSource.getMessage("user.reset-password.success");
 			}
 		} catch (Exception e) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
@@ -165,15 +167,15 @@ public class AuthService {
 	public ResponseMessage search(AuthVO input, Map<String, Object> searchKeys) {
 		List<User> list = new ArrayList<>();
 		try {
-			list = userRepository.findAll();
+			list = repository.findAll();
 
 			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("account.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"));
 			}
 		} catch (Exception e) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
 		}
 
-		return ResponseMessage.ok(list, messageSource.getMessage("account.lookup.success"));
+		return ResponseMessage.ok(list, messageSource.getMessage("user.search.success"));
 	}
 }
