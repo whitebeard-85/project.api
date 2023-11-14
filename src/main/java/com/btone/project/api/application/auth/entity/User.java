@@ -1,11 +1,11 @@
-package com.btone.project.api.auth.entity;
+package com.btone.project.api.application.auth.entity;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.btone.project.api.auth.enums.SocialType;
+import com.btone.project.api.application.auth.enums.SocialType;
 import com.btone.project.api.common.entity.BaseTimeEntity;
 import com.btone.project.api.common.util.PasswordConverter;
 import com.fasterxml.jackson.annotation.JsonBackReference;

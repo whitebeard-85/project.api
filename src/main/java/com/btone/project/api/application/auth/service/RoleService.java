@@ -1,4 +1,4 @@
-package com.btone.project.api.auth.service;
+package com.btone.project.api.application.auth.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.btone.project.api.auth.entity.Role;
-import com.btone.project.api.auth.repository.RoleRepository;
-import com.btone.project.api.auth.vo.RoleVO;
+import com.btone.project.api.application.auth.entity.Role;
+import com.btone.project.api.application.auth.repository.RoleRepository;
+import com.btone.project.api.application.auth.vo.RoleVO;
 import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
 import com.btone.project.api.common.specification.CommonSpecification;

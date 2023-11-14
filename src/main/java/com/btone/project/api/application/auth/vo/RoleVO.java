@@ -1,4 +1,4 @@
-package com.btone.project.api.auth.vo;
+package com.btone.project.api.application.auth.vo;
 
 import lombok.Data;
 

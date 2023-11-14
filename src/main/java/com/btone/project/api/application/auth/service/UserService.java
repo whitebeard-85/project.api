@@ -1,4 +1,4 @@
-package com.btone.project.api.auth.service;
+package com.btone.project.api.application.auth.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,11 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.btone.project.api.auth.entity.Role;
-import com.btone.project.api.auth.entity.User;
-import com.btone.project.api.auth.enums.AuthMethods;
-import com.btone.project.api.auth.repository.UserRepository;
-import com.btone.project.api.auth.vo.UserVO;
+import com.btone.project.api.application.auth.entity.Role;
+import com.btone.project.api.application.auth.entity.User;
+import com.btone.project.api.application.auth.enums.UserMethods;
+import com.btone.project.api.application.auth.repository.UserRepository;
+import com.btone.project.api.application.auth.vo.UserVO;
 import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
 import com.btone.project.api.common.specification.CommonSpecification;
@@ -54,9 +54,9 @@ public class UserService {
 	public ResponseMessage methods(String method, UserVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
-		if(AuthMethods.CHECKID.getKey().equals(method) || AuthMethods.SIGNUP.getKey().equals(method)) {
+		if(UserMethods.CHECKID.getKey().equals(method) || UserMethods.SIGNUP.getKey().equals(method)) {
 			return signup(method, input, searchKeys);
-		}else if(AuthMethods.EDIT.getKey().equals(method) || AuthMethods.CANCEL.getKey().equals(method) || AuthMethods.RESETPASSWORD.getKey().equals(method)) {
+		}else if(UserMethods.EDIT.getKey().equals(method) || UserMethods.CANCEL.getKey().equals(method) || UserMethods.RESETPASSWORD.getKey().equals(method)) {
 			return edit(method, input, searchKeys);
 		}else if(CommonMethods.SEARCH.getKey().equals(method)) {
 			return search(input, searchKeys);
@@ -89,7 +89,7 @@ public class UserService {
 				}
 			}
 
-			if(AuthMethods.SIGNUP.getKey().equals(method)) {
+			if(UserMethods.SIGNUP.getKey().equals(method)) {
 				Role role = Role.builder()
 						.roleCd(input.getRoleCd())
 						.build();
@@ -136,13 +136,13 @@ public class UserService {
 
 			user = optionalUser.get();
 
-			if(AuthMethods.EDIT.getKey().equals(method)) {
+			if(UserMethods.EDIT.getKey().equals(method)) {
 				user.setActvNm(input.getActvNm());
 				user.setPwd(input.getPwd());
-			}else if(AuthMethods.CANCEL.getKey().equals(method)){
+			}else if(UserMethods.CANCEL.getKey().equals(method)){
 				user.setDelYn("Y");
 				message = messageSource.getMessage("user.cancel.success");
-			}else if(AuthMethods.RESETPASSWORD.getKey().equals(method)) {
+			}else if(UserMethods.RESETPASSWORD.getKey().equals(method)) {
 				String tmpPwd = CommonUtils.getRamdomPassword(20);
 				user.setRsPwdYn("Y");
 				user.setTmpPwd(tmpPwd);

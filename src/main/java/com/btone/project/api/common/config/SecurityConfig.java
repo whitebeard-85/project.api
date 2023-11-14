@@ -25,7 +25,7 @@ public class SecurityConfig {
 		http.csrf(csrf -> csrf.disable());
         http.authorizeHttpRequests(request -> request
                 .dispatcherTypeMatchers(DispatcherType.FORWARD).permitAll()
-                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/auth/**", "/board/**").permitAll()
         );
 
         return http.build();
