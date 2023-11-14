@@ -12,9 +12,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.auth.entity.Role;
-import com.btone.project.api.auth.enums.Method;
+import com.btone.project.api.auth.enums.AuthMethods;
 import com.btone.project.api.auth.repository.RoleRepository;
 import com.btone.project.api.auth.vo.RoleVO;
+import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
 import com.btone.project.api.common.specification.CommonSpecification;
 
@@ -62,11 +63,11 @@ public class RoleService {
 	public ResponseMessage methods(String method, RoleVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
-		if(Method.CREATE.getKey().equals(method)) {
+		if(CommonMethods.CREATE.getKey().equals(method)) {
 			return create(input, searchKeys);
-		} else if(Method.UPDATE.getKey().equals(method) || Method.DELETE.getKey().equals(method)) {
+		} else if(CommonMethods.UPDATE.getKey().equals(method) || CommonMethods.DELETE.getKey().equals(method)) {
 			return ud(method, input, searchKeys);
-		} else if(Method.SEARCH.getKey().equals(method)) {
+		} else if(CommonMethods.SEARCH.getKey().equals(method)) {
 			return search(input, searchKeys);
 		}
 
@@ -135,7 +136,7 @@ public class RoleService {
 
 			role = optionalRole.get();
 
-			if(Method.UPDATE.getKey().equals(method)) {
+			if(CommonMethods.UPDATE.getKey().equals(method)) {
 				role.setRoleNm(input.getRoleNm());
 				role.setRoleDesc(input.getRoleDesc());
 			}else {

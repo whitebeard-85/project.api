@@ -13,9 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.auth.entity.Role;
 import com.btone.project.api.auth.entity.User;
-import com.btone.project.api.auth.enums.Method;
+import com.btone.project.api.auth.enums.AuthMethods;
 import com.btone.project.api.auth.repository.UserRepository;
 import com.btone.project.api.auth.vo.UserVO;
+import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
 import com.btone.project.api.common.specification.CommonSpecification;
 import com.btone.project.api.common.util.CommonUtils;
@@ -53,11 +54,11 @@ public class UserService {
 	public ResponseMessage methods(String method, UserVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
-		if(Method.CHECKID.getKey().equals(method) || Method.SIGNUP.getKey().equals(method)) {
+		if(AuthMethods.CHECKID.getKey().equals(method) || AuthMethods.SIGNUP.getKey().equals(method)) {
 			return signup(method, input, searchKeys);
-		}else if(Method.EDIT.getKey().equals(method) || Method.CANCEL.getKey().equals(method) || Method.RESETPASSWORD.getKey().equals(method)) {
+		}else if(AuthMethods.EDIT.getKey().equals(method) || AuthMethods.CANCEL.getKey().equals(method) || AuthMethods.RESETPASSWORD.getKey().equals(method)) {
 			return edit(method, input, searchKeys);
-		}else if(Method.SEARCH.getKey().equals(method)) {
+		}else if(CommonMethods.SEARCH.getKey().equals(method)) {
 			return search(input, searchKeys);
 		}
 
@@ -88,7 +89,7 @@ public class UserService {
 				}
 			}
 
-			if(Method.SIGNUP.getKey().equals(method)) {
+			if(AuthMethods.SIGNUP.getKey().equals(method)) {
 				Role role = Role.builder()
 						.roleCd(input.getRoleCd())
 						.build();
@@ -135,13 +136,13 @@ public class UserService {
 
 			user = optionalUser.get();
 
-			if(Method.EDIT.getKey().equals(method)) {
+			if(AuthMethods.EDIT.getKey().equals(method)) {
 				user.setActvNm(input.getActvNm());
 				user.setPwd(input.getPwd());
-			}else if(Method.CANCEL.getKey().equals(method)){
+			}else if(AuthMethods.CANCEL.getKey().equals(method)){
 				user.setDelYn("Y");
 				message = messageSource.getMessage("user.cancel.success");
-			}else if(Method.RESETPASSWORD.getKey().equals(method)) {
+			}else if(AuthMethods.RESETPASSWORD.getKey().equals(method)) {
 				String tmpPwd = CommonUtils.getRamdomPassword(20);
 				user.setRsPwdYn("Y");
 				user.setTmpPwd(tmpPwd);
