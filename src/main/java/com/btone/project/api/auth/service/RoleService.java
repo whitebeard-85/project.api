@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.auth.entity.Role;
-import com.btone.project.api.auth.enums.AuthMethods;
 import com.btone.project.api.auth.repository.RoleRepository;
 import com.btone.project.api.auth.vo.RoleVO;
 import com.btone.project.api.common.enums.CommonMethods;
