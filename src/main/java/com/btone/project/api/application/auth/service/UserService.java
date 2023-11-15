@@ -116,7 +116,7 @@ public class UserService {
 	* @methodName  : edit
 	* @author      : 오수병
 	* @date        : 2023.11.10
-	* @description : 회원정보수정, 회원탈퇴
+	* @description : 회원정보수정/회원탈퇴
 	* @param method
 	* @param input
 	* @param searchKeys
@@ -160,7 +160,7 @@ public class UserService {
 	* @methodName  : search
 	* @author      : 오수병
 	* @date        : 2023.11.10
-	* @description : 회원정보조회
+	* @description : 회원목록조회
 	* @param input
 	* @param searchKeys
 	* @return

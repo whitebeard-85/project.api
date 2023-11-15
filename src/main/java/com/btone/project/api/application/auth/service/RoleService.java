@@ -115,7 +115,7 @@ public class RoleService {
 	* @methodName  : ud
 	* @author      : 오수병
 	* @date        : 2023.11.13
-	* @description : 권한수정, 삭제
+	* @description : 권한수정/삭제
 	* @param method
 	* @param input
 	* @param searchKeys
@@ -153,7 +153,7 @@ public class RoleService {
 	* @methodName  : search
 	* @author      : 오수병
 	* @date        : 2023.11.13
-	* @description : 권한조회
+	* @description : 권한목록조회
 	* @param input
 	* @param searchKeys
 	* @return

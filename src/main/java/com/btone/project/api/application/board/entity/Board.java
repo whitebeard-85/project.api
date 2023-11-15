@@ -23,6 +23,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+* @packageName   : com.btone.project.api.application.board.entity
+* @fileName      : Board.java
+* @author        : 오수병
+* @date          : 2023.11.15
+* @description   : 게시판정보 엔티티
+* ===========================================================
+* DATE              AUTHOR             NOTE
+* -----------------------------------------------------------
+* 2023.11.15        오수병                최초 생성
+*/
 @Getter //lombok getter
 @Setter //lombok setter
 @NoArgsConstructor
