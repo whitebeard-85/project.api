@@ -5,7 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.btone.project.api.application.auth.entity.Role;
+import com.btone.project.api.common.entity.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
@@ -34,7 +34,7 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-public class Posts {
+public class Post extends BaseTimeEntity {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,6 +48,7 @@ public class Posts {
 
 	private String title;
 	private String contents;
+	private String writer;
 
 	@ColumnDefault("'N'")
 	private String delYn;
