@@ -73,7 +73,7 @@ public class PostService {
 		Post post = null;
 		try {
 			searchKeys.put("delYn", "N");
-			searchKeys.put("boardSn", input.getBoardSn());
+			searchKeys.put("postSn", input.getPostSn());
 			Optional<Post> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalRole.isEmpty()) {
@@ -90,6 +90,7 @@ public class PostService {
 				message = messageSource.getMessage("board.delete.success");
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
 		}
 
@@ -99,7 +100,7 @@ public class PostService {
 	public ResponseMessage search(PostVO input, Map<String, Object> searchKeys) {
 		List<Post> list = new ArrayList<>();
 		try {
-			list = postSearchAndFilterrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn()));
+			list = postSearchAndFilterrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"));
