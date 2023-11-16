@@ -1,4 +1,4 @@
-package com.btone.project.api.application.board.repository;
+package com.btone.project.api.application.board.domain.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;

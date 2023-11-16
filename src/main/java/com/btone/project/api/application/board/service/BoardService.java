@@ -11,9 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.btone.project.api.application.board.domain.repository.BoardRepository;
 import com.btone.project.api.application.board.entity.Board;
 import com.btone.project.api.application.board.enums.BoardType;
-import com.btone.project.api.application.board.repository.BoardRepository;
 import com.btone.project.api.application.board.vo.BoardVO;
 import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
