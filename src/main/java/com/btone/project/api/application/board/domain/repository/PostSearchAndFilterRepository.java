@@ -2,6 +2,7 @@ package com.btone.project.api.application.board.domain.repository;
 
 import static com.btone.project.api.application.board.entity.QBoard.board;
 import static com.btone.project.api.application.board.entity.QPost.post;
+import static com.btone.project.api.application.auth.entity.QUser.user;
 
 import java.util.List;
 
@@ -28,8 +29,10 @@ public class PostSearchAndFilterRepository {
 		return jpaQueryFactory.select(post)
 				.from(post).leftJoin(board)
 				.on(post.board.boardSn.eq(board.boardSn))
+				.leftJoin(user)
+				.on(post.writer.eq(user.userId))
 				.where(
-					allEq(postSearchCondition.getBoardSn(), postSearchCondition.getPostSn(), postSearchCondition.getTitle())
+					allEq(postSearchCondition.getBoardSn(), postSearchCondition.getPostSn(), postSearchCondition.getTitle(), postSearchCondition.getContents(), postSearchCondition.getWriter())
 				)
 				.orderBy(board.boardSn.asc(), post.postSn.asc())
 				.fetch();
@@ -47,8 +50,16 @@ public class PostSearchAndFilterRepository {
 		return title != null ? post.title.contains(title) : null;
 	}
 
-	private BooleanBuilder allEq(Integer boardSn, Integer postSn, String title) {
+	private Predicate contentsContains(String contents) {
+		return contents != null ? post.contents.contains(contents) : null;
+	}
+
+	private Predicate writerContains(String writer) {
+		return writer != null ? user.actvNm.contains(writer) : null;
+	}
+
+	private BooleanBuilder allEq(Integer boardSn, Integer postSn, String title, String contents, String writer) {
 		BooleanBuilder builder = new BooleanBuilder();
-	    return builder.and(boardSnEq(boardSn)).and(postSnEq(postSn)).and(titleContains(title));
+	    return builder.and(boardSnEq(boardSn)).and(postSnEq(postSn)).and(titleContains(title)).and(contentsContains(contents)).and(writerContains(writer));
 	}
 }
