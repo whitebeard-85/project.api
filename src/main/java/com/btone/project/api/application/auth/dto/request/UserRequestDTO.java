@@ -1,9 +1,9 @@
-package com.btone.project.api.application.auth.vo;
+package com.btone.project.api.application.auth.dto.request;
 
 import lombok.Data;
 
 @Data
-public class UserVO {
+public class UserRequestDTO {
 	private Integer userSn;		// 사용자일련번호
 	private String userId;		// 사용자아이디
 	private String pwd;			// 비밀번호

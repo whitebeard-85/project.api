@@ -17,10 +17,10 @@ import com.btone.project.api.application.board.domain.model.Post;
 import com.btone.project.api.application.board.domain.repository.BoardRepository;
 import com.btone.project.api.application.board.domain.repository.PostRepository;
 import com.btone.project.api.application.board.domain.repository.PostSearchAndFilterRepository;
-import com.btone.project.api.application.board.vo.PostVO;
+import com.btone.project.api.application.board.dto.request.PostRequestDTO;
+import com.btone.project.api.common.domain.model.ResponseMessage;
+import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
-import com.btone.project.api.common.model.ResponseMessage;
-import com.btone.project.api.common.specification.CommonSpecification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,7 +34,7 @@ public class PostService {
 	private final BoardRepository boardRepository;
 	private final MessageSourceAccessor messageSource;
 
-	public ResponseMessage methods(String method, PostVO input) {
+	public ResponseMessage methods(String method, PostRequestDTO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(CommonMethods.CREATE.getKey().equals(method)) {
@@ -48,7 +48,7 @@ public class PostService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
-	public ResponseMessage create(PostVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage create(PostRequestDTO input, Map<String, Object> searchKeys) {
 		try {
 			searchKeys.put("delYn", "N");
 			searchKeys.put("boardSn", input.getBoardSn());
@@ -77,7 +77,7 @@ public class PostService {
 		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
-	public ResponseMessage update(String method, PostVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage update(String method, PostRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		Post post = null;
 		try {
@@ -107,7 +107,7 @@ public class PostService {
 		return ResponseMessage.ok(null, message, null);
 	}
 
-	public ResponseMessage search(PostVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage search(PostRequestDTO input, Map<String, Object> searchKeys) {
 		List<Post> list = new ArrayList<>();
 		try {
 			list = postSearchAndFilterrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));

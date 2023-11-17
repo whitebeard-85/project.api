@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.btone.project.api.application.auth.dto.request.RoleRequestDTO;
 import com.btone.project.api.application.auth.service.RoleService;
-import com.btone.project.api.application.auth.vo.RoleVO;
-import com.btone.project.api.common.model.ResponseMessage;
+import com.btone.project.api.common.domain.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +44,7 @@ public class RoleController {
 	* @return
 	*/
 	@PostMapping("/{method}")
-	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody RoleVO input) {
+	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody RoleRequestDTO input) {
 		ResponseMessage response = null;
 
 		try {

@@ -1,4 +1,4 @@
-package com.btone.project.api.common.model;
+package com.btone.project.api.common.domain.model;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

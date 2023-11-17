@@ -1,4 +1,4 @@
-package com.btone.project.api.common.entity;
+package com.btone.project.api.common.domain.model;
 
 import java.time.LocalDateTime;
 

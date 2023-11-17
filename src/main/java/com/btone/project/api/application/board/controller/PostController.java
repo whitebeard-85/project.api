@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.btone.project.api.application.board.dto.request.PostRequestDTO;
 import com.btone.project.api.application.board.service.PostService;
-import com.btone.project.api.application.board.vo.PostVO;
-import com.btone.project.api.common.model.ResponseMessage;
+import com.btone.project.api.common.domain.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,7 +24,7 @@ public class PostController {
 	private final MessageSourceAccessor messageSource;
 
 	@PostMapping("/{method}")
-	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody PostVO input) {
+	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody PostRequestDTO input) {
 		ResponseMessage response = null;
 
 		try {

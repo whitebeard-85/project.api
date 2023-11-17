@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.application.board.domain.model.Board;
 import com.btone.project.api.application.board.domain.repository.BoardRepository;
+import com.btone.project.api.application.board.dto.request.BoardRequestDTO;
 import com.btone.project.api.application.board.enums.BoardType;
-import com.btone.project.api.application.board.vo.BoardVO;
+import com.btone.project.api.common.domain.model.ResponseMessage;
+import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
-import com.btone.project.api.common.model.ResponseMessage;
-import com.btone.project.api.common.specification.CommonSpecification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -49,7 +49,7 @@ public class BoardService {
 	* @param input
 	* @return
 	*/
-	public ResponseMessage methods(String method, BoardVO input) {
+	public ResponseMessage methods(String method, BoardRequestDTO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(CommonMethods.CREATE.getKey().equals(method)) {
@@ -71,7 +71,7 @@ public class BoardService {
 	* @param input
 	* @return
 	*/
-	public ResponseMessage create(BoardVO input) {
+	public ResponseMessage create(BoardRequestDTO input) {
 		try {
 			Board manage = Board.builder()
 					.boardType(BoardType.find(input.getBoardType()))
@@ -97,7 +97,7 @@ public class BoardService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage update(String method, BoardVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage update(String method, BoardRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		Board board = null;
 		try {
@@ -135,7 +135,7 @@ public class BoardService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage search(BoardVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage search(BoardRequestDTO input, Map<String, Object> searchKeys) {
 		List<Board> list = new ArrayList<>();
 		try {
 			list = repository.findAll();

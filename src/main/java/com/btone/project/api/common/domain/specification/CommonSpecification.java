@@ -1,4 +1,4 @@
-package com.btone.project.api.common.specification;
+package com.btone.project.api.common.domain.specification;
 
 import java.util.ArrayList;
 import java.util.List;

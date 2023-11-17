@@ -1,9 +1,9 @@
-package com.btone.project.api.application.auth.vo;
+package com.btone.project.api.application.auth.dto.request;
 
 import lombok.Data;
 
 @Data
-public class RoleVO {
+public class RoleRequestDTO {
 	private String roleCd;
     private String roleNm;
     private String roleDesc;

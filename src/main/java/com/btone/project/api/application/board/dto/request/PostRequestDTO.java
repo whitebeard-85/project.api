@@ -1,9 +1,9 @@
-package com.btone.project.api.application.board.vo;
+package com.btone.project.api.application.board.dto.request;
 
 import lombok.Data;
 
 @Data
-public class PostVO {
+public class PostRequestDTO {
 	private Integer postSn;
 	private Integer boardSn;
 	private String title;

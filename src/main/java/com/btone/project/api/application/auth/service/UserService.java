@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.btone.project.api.application.auth.domain.model.Role;
 import com.btone.project.api.application.auth.domain.model.User;
 import com.btone.project.api.application.auth.domain.repository.UserRepository;
+import com.btone.project.api.application.auth.dto.request.UserRequestDTO;
 import com.btone.project.api.application.auth.enums.UserMethods;
-import com.btone.project.api.application.auth.vo.UserVO;
+import com.btone.project.api.common.domain.model.ResponseMessage;
+import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
-import com.btone.project.api.common.model.ResponseMessage;
-import com.btone.project.api.common.specification.CommonSpecification;
 import com.btone.project.api.common.util.CommonUtils;
 
 import lombok.RequiredArgsConstructor;
@@ -51,7 +51,7 @@ public class UserService {
 	* @param input
 	* @return
 	*/
-	public ResponseMessage methods(String method, UserVO input) {
+	public ResponseMessage methods(String method, UserRequestDTO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(UserMethods.CHECKID.getKey().equals(method) || UserMethods.SIGNUP.getKey().equals(method)) {
@@ -75,7 +75,7 @@ public class UserService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage signup(String method, UserVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage signup(String method, UserRequestDTO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("user.signup.success");
 		try {
 			searchKeys.put("userId", input.getUserId());
@@ -122,7 +122,7 @@ public class UserService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage edit(String method, UserVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage edit(String method, UserRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		User user = null;
 		try {
@@ -166,7 +166,7 @@ public class UserService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage search(UserVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage search(UserRequestDTO input, Map<String, Object> searchKeys) {
 		List<User> list = new ArrayList<>();
 		try {
 			list = repository.findAll();

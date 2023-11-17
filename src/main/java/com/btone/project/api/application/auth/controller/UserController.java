@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.btone.project.api.application.auth.dto.request.UserRequestDTO;
 import com.btone.project.api.application.auth.service.UserService;
-import com.btone.project.api.application.auth.vo.UserVO;
-import com.btone.project.api.common.model.ResponseMessage;
+import com.btone.project.api.common.domain.model.ResponseMessage;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,7 +44,7 @@ public class UserController {
 	* @return
 	*/
 	@PostMapping("/{method}")
-	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody UserVO input) {
+	public ResponseEntity<?> methods(@PathVariable String method, @RequestBody UserRequestDTO input) {
 		ResponseMessage response = null;
 
 		try {

@@ -13,10 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.application.auth.domain.model.Role;
 import com.btone.project.api.application.auth.domain.repository.RoleRepository;
-import com.btone.project.api.application.auth.vo.RoleVO;
+import com.btone.project.api.application.auth.dto.request.RoleRequestDTO;
+import com.btone.project.api.common.domain.model.ResponseMessage;
+import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
-import com.btone.project.api.common.model.ResponseMessage;
-import com.btone.project.api.common.specification.CommonSpecification;
 
 import lombok.RequiredArgsConstructor;
 
@@ -59,7 +59,7 @@ public class RoleService {
 	* @param input
 	* @return
 	*/
-	public ResponseMessage methods(String method, RoleVO input) {
+	public ResponseMessage methods(String method, RoleRequestDTO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(CommonMethods.CREATE.getKey().equals(method)) {
@@ -82,7 +82,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage create(RoleVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage create(RoleRequestDTO input, Map<String, Object> searchKeys) {
 		try {
 			searchKeys.put("roleCd", input.getRoleCd());
 			List<Role> list = repository.findAll(CommonSpecification.searchCondition(searchKeys));
@@ -120,7 +120,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage update(String method, RoleVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage update(String method, RoleRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		Role role = null;
 		try {
@@ -158,7 +158,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage search(RoleVO input, Map<String, Object> searchKeys) {
+	public ResponseMessage search(RoleRequestDTO input, Map<String, Object> searchKeys) {
 		List<Role> list = new ArrayList<>();
 		try {
 			list = repository.findAll();
