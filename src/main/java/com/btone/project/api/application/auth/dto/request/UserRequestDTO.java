@@ -13,4 +13,5 @@ public class UserRequestDTO {
 	private String tmpPwd;		// 임시비밀번호(비밀번호초기화시 발급)
 	private String delYn;		// 삭제여부
     private String roleCd;
+    private String roleNm;
 }

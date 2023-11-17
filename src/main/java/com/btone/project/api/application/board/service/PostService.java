@@ -16,7 +16,7 @@ import com.btone.project.api.application.board.domain.model.Board;
 import com.btone.project.api.application.board.domain.model.Post;
 import com.btone.project.api.application.board.domain.repository.BoardRepository;
 import com.btone.project.api.application.board.domain.repository.PostRepository;
-import com.btone.project.api.application.board.domain.repository.PostSearchAndFilterRepository;
+import com.btone.project.api.application.board.domain.repository.PostSearchRepository;
 import com.btone.project.api.application.board.dto.request.PostRequestDTO;
 import com.btone.project.api.application.board.dto.response.PostResponseDTO;
 import com.btone.project.api.common.domain.model.ResponseMessage;
@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class PostService {
 
 	private final PostRepository repository;
-	private final PostSearchAndFilterRepository postSearchAndFilterrepository;
+	private final PostSearchRepository postSearchrepository;
 	private final BoardRepository boardRepository;
 	private final MessageSourceAccessor messageSource;
 
@@ -111,7 +111,7 @@ public class PostService {
 	public ResponseMessage search(PostRequestDTO input, Map<String, Object> searchKeys) {
 		List<PostResponseDTO> list = new ArrayList<>();
 		try {
-			list = postSearchAndFilterrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
+			list = postSearchrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);

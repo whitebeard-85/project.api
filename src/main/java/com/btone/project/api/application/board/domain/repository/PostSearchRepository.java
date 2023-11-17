@@ -18,11 +18,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 
 @Repository
-public class PostSearchAndFilterRepository {
+public class PostSearchRepository {
 
 	private final JPAQueryFactory jpaQueryFactory;
 
-	public PostSearchAndFilterRepository(EntityManager entityManager) {
+	public PostSearchRepository(EntityManager entityManager) {
 		this.jpaQueryFactory = new JPAQueryFactory(entityManager);
 	}
 

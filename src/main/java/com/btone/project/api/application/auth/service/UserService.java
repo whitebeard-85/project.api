@@ -11,10 +11,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.btone.project.api.application.auth.domain.condition.UserSearchCondition;
 import com.btone.project.api.application.auth.domain.model.Role;
 import com.btone.project.api.application.auth.domain.model.User;
 import com.btone.project.api.application.auth.domain.repository.UserRepository;
+import com.btone.project.api.application.auth.domain.repository.UserSearchRepository;
 import com.btone.project.api.application.auth.dto.request.UserRequestDTO;
+import com.btone.project.api.application.auth.dto.response.UserResponseDTO;
 import com.btone.project.api.application.auth.enums.UserMethods;
 import com.btone.project.api.common.domain.model.ResponseMessage;
 import com.btone.project.api.common.domain.specification.CommonSpecification;
@@ -40,6 +43,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
 
 	private final UserRepository repository;
+	private final UserSearchRepository userSearchrepository;
 	private final MessageSourceAccessor messageSource;
 
 	/**
@@ -167,9 +171,9 @@ public class UserService {
 	* @return
 	*/
 	public ResponseMessage search(UserRequestDTO input, Map<String, Object> searchKeys) {
-		List<User> list = new ArrayList<>();
+		List<UserResponseDTO> list = new ArrayList<>();
 		try {
-			list = repository.findAll();
+			list = userSearchrepository.search(UserSearchCondition.build(input.getActvNm(), input.getRoleCd(), input.getRoleNm()));
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"), null);
