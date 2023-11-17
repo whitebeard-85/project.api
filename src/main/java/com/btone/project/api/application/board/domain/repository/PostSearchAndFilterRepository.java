@@ -1,6 +1,6 @@
 package com.btone.project.api.application.board.domain.repository;
 
-import static com.btone.project.api.application.auth.entity.QUser.user;
+import static com.btone.project.api.application.auth.domain.model.QUser.user;
 import static com.btone.project.api.application.board.domain.model.QBoard.board
 import static com.btone.project.api.application.board.domain.model.QPost.post;
 

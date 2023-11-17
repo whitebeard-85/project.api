@@ -11,10 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.btone.project.api.application.auth.entity.Role;
-import com.btone.project.api.application.auth.entity.User;
+import com.btone.project.api.application.auth.domain.model.Role;
+import com.btone.project.api.application.auth.domain.model.User;
+import com.btone.project.api.application.auth.domain.repository.UserRepository;
 import com.btone.project.api.application.auth.enums.UserMethods;
-import com.btone.project.api.application.auth.repository.UserRepository;
 import com.btone.project.api.application.auth.vo.UserVO;
 import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
