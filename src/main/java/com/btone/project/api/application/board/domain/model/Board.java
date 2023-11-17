@@ -1,4 +1,4 @@
-package com.btone.project.api.application.board.entity;
+package com.btone.project.api.application.board.domain.model;
 
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;

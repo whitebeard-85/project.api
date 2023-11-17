@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.application.board.domain.condition.PostSearchCondition;
+import com.btone.project.api.application.board.domain.model.Board;
+import com.btone.project.api.application.board.domain.model.Post;
 import com.btone.project.api.application.board.domain.repository.BoardRepository;
 import com.btone.project.api.application.board.domain.repository.PostRepository;
 import com.btone.project.api.application.board.domain.repository.PostSearchAndFilterRepository;
-import com.btone.project.api.application.board.entity.Board;
-import com.btone.project.api.application.board.entity.Post;
 import com.btone.project.api.application.board.vo.PostVO;
 import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;

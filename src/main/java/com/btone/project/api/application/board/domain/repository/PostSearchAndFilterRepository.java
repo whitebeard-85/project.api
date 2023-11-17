@@ -1,15 +1,15 @@
 package com.btone.project.api.application.board.domain.repository;
 
 import static com.btone.project.api.application.auth.entity.QUser.user;
-import static com.btone.project.api.application.board.entity.QBoard.board;
-import static com.btone.project.api.application.board.entity.QPost.post;
+import static com.btone.project.api.application.board.domain.model.QBoard.board
+import static com.btone.project.api.application.board.domain.model.QPost.post;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
 import com.btone.project.api.application.board.domain.condition.PostSearchCondition;
-import com.btone.project.api.application.board.entity.Post;
+import com.btone.project.api.application.board.domain.model.Post;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
