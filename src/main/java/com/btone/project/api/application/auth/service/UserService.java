@@ -62,7 +62,7 @@ public class UserService {
 			return search(input, searchKeys);
 		}
 
-		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"));
+		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
 	/**
@@ -83,9 +83,9 @@ public class UserService {
 
 			if(list.size() > 0) {
 				if("Y".equals(list.get(0).getDelYn())) {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.canceled"));
+					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.canceled"), null);
 				}else {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.duplicated"));
+					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.duplicated"), null);
 				}
 			}
 
@@ -106,10 +106,10 @@ public class UserService {
 				message = messageSource.getMessage("user.checkid.success");
 			}
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(null, message);
+		return ResponseMessage.ok(null, message, null);
 	}
 
 	/**
@@ -123,7 +123,7 @@ public class UserService {
 	* @return
 	*/
 	public ResponseMessage edit(String method, UserVO input, Map<String, Object> searchKeys) {
-		String message = messageSource.getMessage("user.edit.success");
+		String message = "";
 		User user = null;
 		try {
 			searchKeys.put("delYn", "N");
@@ -131,7 +131,7 @@ public class UserService {
 			Optional<User> optionalUser = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalUser.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"), null);
 			}
 
 			user = optionalUser.get();
@@ -139,6 +139,7 @@ public class UserService {
 			if(UserMethods.EDIT.getKey().equals(method)) {
 				user.setActvNm(input.getActvNm());
 				user.setPwd(input.getPwd());
+				message = messageSource.getMessage("user.edit.success");
 			}else if(UserMethods.CANCEL.getKey().equals(method)){
 				user.setDelYn("Y");
 				message = messageSource.getMessage("user.cancel.success");
@@ -150,10 +151,10 @@ public class UserService {
 				message = messageSource.getMessage("user.reset-password.success");
 			}
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(user, message);
+		return ResponseMessage.ok(user, message, null);
 	}
 
 	/**
@@ -171,12 +172,12 @@ public class UserService {
 			list = repository.findAll();
 
 			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.notexists"), null);
 			}
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(list, messageSource.getMessage("user.search.success"));
+		return ResponseMessage.ok(list, messageSource.getMessage("user.search.success"), null);
 	}
 }

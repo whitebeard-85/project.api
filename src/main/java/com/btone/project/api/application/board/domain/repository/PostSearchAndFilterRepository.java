@@ -1,8 +1,8 @@
 package com.btone.project.api.application.board.domain.repository;
 
+import static com.btone.project.api.application.auth.entity.QUser.user;
 import static com.btone.project.api.application.board.entity.QBoard.board;
 import static com.btone.project.api.application.board.entity.QPost.post;
-import static com.btone.project.api.application.auth.entity.QUser.user;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import com.btone.project.api.application.board.domain.condition.PostSearchCondit
 import com.btone.project.api.application.board.entity.Post;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
@@ -26,7 +27,7 @@ public class PostSearchAndFilterRepository {
 	}
 
 	public List<Post> search(PostSearchCondition postSearchCondition){
-		return jpaQueryFactory.select(post)
+		return jpaQueryFactory.select(Projections.bean(post, board, user))
 				.from(post).leftJoin(board)
 				.on(post.board.boardSn.eq(board.boardSn))
 				.leftJoin(user)

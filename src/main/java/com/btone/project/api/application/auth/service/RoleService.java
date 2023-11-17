@@ -65,12 +65,12 @@ public class RoleService {
 		if(CommonMethods.CREATE.getKey().equals(method)) {
 			return create(input, searchKeys);
 		} else if(CommonMethods.UPDATE.getKey().equals(method) || CommonMethods.DELETE.getKey().equals(method)) {
-			return ud(method, input, searchKeys);
+			return update(method, input, searchKeys);
 		} else if(CommonMethods.SEARCH.getKey().equals(method)) {
 			return search(input, searchKeys);
 		}
 
-		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"));
+		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
 	/**
@@ -83,16 +83,15 @@ public class RoleService {
 	* @return
 	*/
 	public ResponseMessage create(RoleVO input, Map<String, Object> searchKeys) {
-		String message = messageSource.getMessage("role.create.success");
 		try {
 			searchKeys.put("roleCd", input.getRoleCd());
 			List<Role> list = repository.findAll(CommonSpecification.searchCondition(searchKeys));
 
 			if(list.size() > 0) {
 				if("Y".equals(list.get(0).getDelYn())) {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.deleted"));
+					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.deleted"), null);
 				}else {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.duplicated"));
+					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.duplicated"), null);
 				}
 			}
 
@@ -105,10 +104,10 @@ public class RoleService {
 			repository.save(role);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(null, message);
+		return ResponseMessage.ok(null, messageSource.getMessage("role.create.success"), null);
 	}
 
 	/**
@@ -121,8 +120,8 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
-	public ResponseMessage ud(String method, RoleVO input, Map<String, Object> searchKeys) {
-		String message = messageSource.getMessage("role.update.success");
+	public ResponseMessage update(String method, RoleVO input, Map<String, Object> searchKeys) {
+		String message = "";
 		Role role = null;
 		try {
 			searchKeys.put("delYn", "N");
@@ -130,7 +129,7 @@ public class RoleService {
 			Optional<Role> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalRole.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"), null);
 			}
 
 			role = optionalRole.get();
@@ -138,15 +137,16 @@ public class RoleService {
 			if(CommonMethods.UPDATE.getKey().equals(method)) {
 				role.setRoleNm(input.getRoleNm());
 				role.setRoleDesc(input.getRoleDesc());
+				message = messageSource.getMessage("role.update.success");
 			}else {
 				role.setDelYn("Y");
 				message = messageSource.getMessage("role.delete.success");
 			}
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(null, message);
+		return ResponseMessage.ok(null, message, null);
 	}
 
 	/**
@@ -164,12 +164,12 @@ public class RoleService {
 			list = repository.findAll();
 
 			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"), null);
 			}
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(list, messageSource.getMessage("role.search.success"));
+		return ResponseMessage.ok(list, messageSource.getMessage("role.search.success"), null);
 	}
 }

@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.application.board.domain.condition.PostSearchCondition;
+import com.btone.project.api.application.board.domain.repository.BoardRepository;
 import com.btone.project.api.application.board.domain.repository.PostRepository;
 import com.btone.project.api.application.board.domain.repository.PostSearchAndFilterRepository;
 import com.btone.project.api.application.board.entity.Board;
 import com.btone.project.api.application.board.entity.Post;
-import com.btone.project.api.application.board.enums.BoardType;
 import com.btone.project.api.application.board.vo.PostVO;
 import com.btone.project.api.common.enums.CommonMethods;
 import com.btone.project.api.common.model.ResponseMessage;
@@ -31,24 +31,33 @@ public class PostService {
 
 	private final PostRepository repository;
 	private final PostSearchAndFilterRepository postSearchAndFilterrepository;
+	private final BoardRepository boardRepository;
 	private final MessageSourceAccessor messageSource;
 
 	public ResponseMessage methods(String method, PostVO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(CommonMethods.CREATE.getKey().equals(method)) {
-			return create(input);
+			return create(input, searchKeys);
 		} else if(CommonMethods.UPDATE.getKey().equals(method) || CommonMethods.DELETE.getKey().equals(method)) {
 			return update(method, input, searchKeys);
 		} else if(CommonMethods.SEARCH.getKey().equals(method)) {
 			return search(input, searchKeys);
 		}
 
-		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"));
+		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
-	public ResponseMessage create(PostVO input) {
+	public ResponseMessage create(PostVO input, Map<String, Object> searchKeys) {
 		try {
+			searchKeys.put("delYn", "N");
+			searchKeys.put("boardSn", input.getBoardSn());
+			Optional<Board> optionalBoard = boardRepository.findOne(CommonSpecification.searchCondition(searchKeys));
+
+			if(optionalBoard.isEmpty()) {
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
+			}
+
 			Board board = Board.builder()
 					.boardSn(input.getBoardSn())
 					.build();
@@ -62,14 +71,14 @@ public class PostService {
 
 			repository.save(post);
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(null, messageSource.getMessage("board.create.success"));
+		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
 	public ResponseMessage update(String method, PostVO input, Map<String, Object> searchKeys) {
-		String message = messageSource.getMessage("board.update.success");
+		String message = "";
 		Post post = null;
 		try {
 			searchKeys.put("delYn", "N");
@@ -77,7 +86,7 @@ public class PostService {
 			Optional<Post> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalRole.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
 			}
 
 			post = optionalRole.get();
@@ -85,16 +94,17 @@ public class PostService {
 			if(CommonMethods.UPDATE.getKey().equals(method)) {
 				post.setTitle(input.getTitle());
 				post.setContents(input.getContents());
+				message = messageSource.getMessage("post.update.success");
 			}else {
 				post.setDelYn("Y");
-				message = messageSource.getMessage("board.delete.success");
+				message = messageSource.getMessage("post.delete.success");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(null, message);
+		return ResponseMessage.ok(null, message, null);
 	}
 
 	public ResponseMessage search(PostVO input, Map<String, Object> searchKeys) {
@@ -103,12 +113,12 @@ public class PostService {
 			list = postSearchAndFilterrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
 
 			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"));
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
 			}
 		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error", new String[] {e.getMessage()}));
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
 
-		return ResponseMessage.ok(list, messageSource.getMessage("board.search.success"));
+		return ResponseMessage.ok(list, messageSource.getMessage("post.search.success"), null);
 	}
 }
