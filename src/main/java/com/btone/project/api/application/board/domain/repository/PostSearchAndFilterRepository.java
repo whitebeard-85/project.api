@@ -9,10 +9,10 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.btone.project.api.application.board.domain.condition.PostSearchCondition;
-import com.btone.project.api.application.board.domain.model.Post;
+import com.btone.project.api.application.board.dto.response.PostResponseDTO;
+import com.btone.project.api.application.board.dto.response.QPostResponseDTO;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Predicate;
-import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
@@ -26,8 +26,8 @@ public class PostSearchAndFilterRepository {
 		this.jpaQueryFactory = new JPAQueryFactory(entityManager);
 	}
 
-	public List<Post> search(PostSearchCondition postSearchCondition){
-		return jpaQueryFactory.select(Projections.bean(post, board, user))
+	public List<PostResponseDTO> search(PostSearchCondition postSearchCondition){
+		return jpaQueryFactory.select(new QPostResponseDTO(board.boardSn, post.postSn, post.title, post.contents, user.actvNm, post.delYn))
 				.from(post).leftJoin(board)
 				.on(post.board.boardSn.eq(board.boardSn))
 				.leftJoin(user)

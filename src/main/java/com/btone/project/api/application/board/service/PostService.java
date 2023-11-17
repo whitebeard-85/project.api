@@ -18,6 +18,7 @@ import com.btone.project.api.application.board.domain.repository.BoardRepository
 import com.btone.project.api.application.board.domain.repository.PostRepository;
 import com.btone.project.api.application.board.domain.repository.PostSearchAndFilterRepository;
 import com.btone.project.api.application.board.dto.request.PostRequestDTO;
+import com.btone.project.api.application.board.dto.response.PostResponseDTO;
 import com.btone.project.api.common.domain.model.ResponseMessage;
 import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
@@ -108,7 +109,7 @@ public class PostService {
 	}
 
 	public ResponseMessage search(PostRequestDTO input, Map<String, Object> searchKeys) {
-		List<Post> list = new ArrayList<>();
+		List<PostResponseDTO> list = new ArrayList<>();
 		try {
 			list = postSearchAndFilterrepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
 
