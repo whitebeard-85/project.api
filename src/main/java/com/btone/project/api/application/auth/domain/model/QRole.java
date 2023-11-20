@@ -22,18 +22,22 @@ public class QRole extends EntityPathBase<Role> {
     public final com.btone.project.api.common.domain.model.QBaseTimeEntity _super = new com.btone.project.api.common.domain.model.QBaseTimeEntity(this);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final StringPath createdDate = _super.createdDate;
 
     public final StringPath delYn = createString("delYn");
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
+    public final StringPath modifiedDate = _super.modifiedDate;
 
     public final StringPath roleCd = createString("roleCd");
 
     public final StringPath roleDesc = createString("roleDesc");
 
     public final StringPath roleNm = createString("roleNm");
+
+    public final NumberPath<Integer> sort = createNumber("sort", Integer.class);
+
+    public final StringPath useYn = createString("useYn");
 
     public QRole(String variable) {
         super(Role.class, forVariable(variable));

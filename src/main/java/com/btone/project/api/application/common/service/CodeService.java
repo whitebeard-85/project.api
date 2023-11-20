@@ -65,8 +65,8 @@ public class CodeService {
 
 			Code code = Code.builder()
 					.codeGrp(codeGrp)
-					.code(input.getCode())
-					.codeNm(input.getCodeNm())
+					.cd(input.getCd())
+					.cdNm(input.getCdNm())
 					.desc1(input.getDesc1())
 					.desc2(input.getDesc2())
 					.build();
@@ -85,7 +85,7 @@ public class CodeService {
 		try {
 			searchKeys.put("delYn", "N");
 			searchKeys.put("grpCd", input.getGrpCd());
-			searchKeys.put("code", input.getCode());
+			searchKeys.put("code", input.getCd());
 			Optional<Code> optionalCode = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalCode.isEmpty()) {
@@ -95,7 +95,7 @@ public class CodeService {
 			code = optionalCode.get();
 
 			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				code.setCodeNm(input.getCodeNm());
+				code.setCdNm(input.getCdNm());
 				code.setDesc1(input.getDesc1());
 				code.setDesc2(input.getDesc2());
 				message = messageSource.getMessage("post.update.success");
@@ -113,7 +113,7 @@ public class CodeService {
 	public ResponseMessage search(CodeRequestDTO input, Map<String, Object> searchKeys) {
 		List<CodeResponseDTO> list = new ArrayList<>();
 		try {
-			list = codeSearchRepository.search(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCode(), input.getCodeNm(), input.getDesc1(), input.getDesc2()));
+			list = codeSearchRepository.search(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCd(), input.getCdNm(), input.getDesc1(), input.getDesc2()));
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);

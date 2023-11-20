@@ -1,4 +1,4 @@
-package com.btone.project.api.application.auth.domain.model;
+package com.btone.project.api.application.log.domain.model;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -10,16 +10,14 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QUser is a Querydsl query type for User
+ * QUserLog is a Querydsl query type for UserLog
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QUser extends EntityPathBase<User> {
+public class QUserLog extends EntityPathBase<UserLog> {
 
-    private static final long serialVersionUID = 1583847938L;
+    private static final long serialVersionUID = -116275038L;
 
-    public static final QUser user = new QUser("user");
-
-    public final com.btone.project.api.common.domain.model.QBaseTimeEntity _super = new com.btone.project.api.common.domain.model.QBaseTimeEntity(this);
+    public static final QUserLog userLog = new QUserLog("userLog");
 
     public final StringPath accessToken = createString("accessToken");
 
@@ -27,13 +25,7 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath agreeYn = createString("agreeYn");
 
-    //inherited
-    public final StringPath createdDate = _super.createdDate;
-
     public final StringPath delYn = createString("delYn");
-
-    //inherited
-    public final StringPath modifiedDate = _super.modifiedDate;
 
     public final StringPath pwd = createString("pwd");
 
@@ -51,16 +43,16 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Integer> userSn = createNumber("userSn", Integer.class);
 
-    public QUser(String variable) {
-        super(User.class, forVariable(variable));
+    public QUserLog(String variable) {
+        super(UserLog.class, forVariable(variable));
     }
 
-    public QUser(Path<? extends User> path) {
+    public QUserLog(Path<? extends UserLog> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QUser(PathMetadata metadata) {
-        super(User.class, metadata);
+    public QUserLog(PathMetadata metadata) {
+        super(UserLog.class, metadata);
     }
 
 }

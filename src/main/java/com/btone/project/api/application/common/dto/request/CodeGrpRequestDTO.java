@@ -8,5 +8,7 @@ public class CodeGrpRequestDTO {
 	private String grpCdNm;
 	private String desc1;
 	private String desc2;
+	private int sort;
+	private String useYn;
 	private String delYn;
 }

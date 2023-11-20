@@ -10,6 +10,8 @@ import com.btone.project.api.common.domain.model.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -37,6 +39,12 @@ public class CodeGrp extends BaseTimeEntity {
 	private String grpCdNm;
 	private String desc1;
 	private String desc2;
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int sort;
+
+	@ColumnDefault("'Y'")
+    private String useYn;
 
 	@ColumnDefault("'N'")
 	private String delYn;

@@ -26,9 +26,9 @@ public class UserSearchRepository {
 	}
 
 	public List<UserResponseDTO> search(UserSearchCondition userSearchCondition) {
-		return jpaQueryFactory.select(new QUserResponseDTO(user.userSn, user.userId, user.pwd, user.actvNm, user.agreeYn, user.rsPwdYn, user.tmpPwd, role.roleCd, role.roleNm))
+		return jpaQueryFactory.select(new QUserResponseDTO(user.userSn, user.userId, user.pwd, user.actvNm, user.agreeYn, user.rsPwdYn, user.tmpPwd, user.roleCd, role.roleNm, user.socialYn, user.socialType, user.accessToken, user.createdDate, user.modifiedDate))
 				.from(user).leftJoin(role)
-				.on(user.role.roleCd.eq(role.roleCd))
+				.on(user.roleCd.eq(role.roleCd))
 				.where(
 					allEq(userSearchCondition.getActvNm(), userSearchCondition.getRoleCd(), userSearchCondition.getRoleNm())
 				)

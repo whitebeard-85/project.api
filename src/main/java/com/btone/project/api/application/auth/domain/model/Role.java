@@ -10,6 +10,8 @@ import com.btone.project.api.common.domain.model.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -47,6 +49,11 @@ public class Role extends BaseTimeEntity {
 
 	private String roleNm;
 	private String roleDesc;
+
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int sort;
+
+	private String useYn;
 
 	@ColumnDefault("'N'")
 	private String delYn;

@@ -30,12 +30,18 @@ public class QBoard extends EntityPathBase<Board> {
     public final EnumPath<com.btone.project.api.application.board.enums.BoardType> boardType = createEnum("boardType", com.btone.project.api.application.board.enums.BoardType.class);
 
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+    public final StringPath createdDate = _super.createdDate;
 
     public final StringPath delYn = createString("delYn");
 
+    public final StringPath endDate = createString("endDate");
+
     //inherited
-    public final DateTimePath<java.time.LocalDateTime> modifiedDate = _super.modifiedDate;
+    public final StringPath modifiedDate = _super.modifiedDate;
+
+    public final StringPath startDate = createString("startDate");
+
+    public final StringPath useYn = createString("useYn");
 
     public QBoard(String variable) {
         super(Board.class, forVariable(variable));

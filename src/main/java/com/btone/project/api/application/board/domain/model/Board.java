@@ -57,6 +57,11 @@ public class Board extends BaseTimeEntity {
 
 	private String boardNm;
 	private String boardDesc;
+	private String startDate;
+	private String endDate;
+
+	@ColumnDefault("'Y'")
+	private String useYn;
 
 	@ColumnDefault("'N'")
 	private String delYn;

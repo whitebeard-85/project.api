@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.application.auth.domain.condition.UserSearchCondition;
-import com.btone.project.api.application.auth.domain.model.Role;
 import com.btone.project.api.application.auth.domain.model.User;
 import com.btone.project.api.application.auth.domain.repository.UserRepository;
 import com.btone.project.api.application.auth.domain.repository.UserSearchRepository;
@@ -94,15 +93,11 @@ public class UserService {
 			}
 
 			if(UserMethods.SIGNUP.getKey().equals(method)) {
-				Role role = Role.builder()
-						.roleCd(input.getRoleCd())
-						.build();
-
 				User user = User.builder()
 						.userId(input.getUserId())
 						.pwd(input.getPwd())
 						.actvNm(input.getActvNm())
-						.role(role)
+						.roleCd(input.getRoleCd())
 						.build();
 
 				repository.save(user);

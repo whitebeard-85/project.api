@@ -6,17 +6,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.btone.project.api.common.domain.model.BaseTimeEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,14 +37,12 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_sn")
     private Integer postSn;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_sn")
-    @JsonBackReference
-    private Board board;
-
+    private Integer boardSn;
 	private String title;
 	private String contents;
 	private String writer;
+	private String startDate;
+	private String endDate;
 
 	@ColumnDefault("'N'")
 	private String delYn;

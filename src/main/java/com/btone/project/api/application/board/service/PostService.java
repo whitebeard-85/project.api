@@ -59,12 +59,8 @@ public class PostService {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
 			}
 
-			Board board = Board.builder()
-					.boardSn(input.getBoardSn())
-					.build();
-
 			Post post = Post.builder()
-					.board(board)
+					.boardSn(input.getBoardSn())
 					.title(input.getTitle())
 					.contents(input.getContents())
 					.writer(input.getWriter())

@@ -6,9 +6,11 @@ import lombok.Data;
 public class CodeRequestDTO {
 	private String grpCd;
 	private String grpCdNm;
-	private String code;
-	private String codeNm;
+	private String cd;
+	private String cdNm;
 	private String desc1;
 	private String desc2;
+	private int sort;
+	private String useYn;
 	private String delYn;
 }

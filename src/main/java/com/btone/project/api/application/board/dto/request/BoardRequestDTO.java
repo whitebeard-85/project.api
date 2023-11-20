@@ -9,5 +9,8 @@ public class BoardRequestDTO {
 	private String boardType;
 	private String boardNm;
 	private String boardDesc;
+	private String startDate;
+	private String endDate;
+	private String useYn;
 	private String delYn;
 }

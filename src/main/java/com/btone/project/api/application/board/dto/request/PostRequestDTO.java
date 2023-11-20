@@ -9,6 +9,9 @@ public class PostRequestDTO {
 	private String title;
 	private String contents;
 	private String writer;
+	private String startDate;
+	private String endDate;
+	private String useYn;
 	private String delYn;
 }
 

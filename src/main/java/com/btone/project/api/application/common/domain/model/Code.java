@@ -5,17 +5,12 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.btone.project.api.application.auth.domain.model.Role;
-import com.btone.project.api.application.auth.enums.SocialType;
-import com.btone.project.api.common.util.PasswordConverter;
+import com.btone.project.api.common.domain.model.BaseTimeEntity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -39,7 +34,7 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
-public class Code {
+public class Code extends BaseTimeEntity {
 
 	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -49,11 +44,17 @@ public class Code {
 
 	@Id
     @Column(name = "code")
-    private String code;
+    private String cd;
 
-	private String codeNm;
+	private String cdNm;
     private String desc1;
     private String desc2;
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int sort;
+
+    @ColumnDefault("'Y'")
+    private String useYn;
 
     @ColumnDefault("'N'")
     private String delYn;
