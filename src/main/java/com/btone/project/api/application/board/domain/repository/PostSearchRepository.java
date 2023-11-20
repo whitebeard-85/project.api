@@ -27,17 +27,16 @@ public class PostSearchRepository {
 	}
 
 	public List<PostResponseDTO> search(PostSearchCondition postSearchCondition){
-//		return jpaQueryFactory.select(new QPostResponseDTO(board.boardSn, post.postSn, post.title, post.contents, user.actvNm, post.delYn, post.createdDate, post.modifiedDate))
-//				.from(post).leftJoin(board)
-//				.on(post.board.boardSn.eq(board.boardSn))
-//				.leftJoin(user)
-//				.on(post.writer.eq(user.userId))
-//				.where(
-//					allEq(postSearchCondition.getBoardSn(), postSearchCondition.getPostSn(), postSearchCondition.getTitle(), postSearchCondition.getContents(), postSearchCondition.getWriter())
-//				)
-//				.orderBy(board.boardSn.asc(), post.postSn.asc())
-//				.fetch();
-		return null;
+		return jpaQueryFactory.select(new QPostResponseDTO(board.boardSn, post.postSn, post.title, post.contents, user.actvNm, post.delYn, post.createdDate, post.modifiedDate))
+				.from(post).leftJoin(board)
+				.on(post.boardSn.eq(board.boardSn))
+				.leftJoin(user)
+				.on(post.writer.eq(user.userId))
+				.where(
+					allEq(postSearchCondition.getBoardSn(), postSearchCondition.getPostSn(), postSearchCondition.getTitle(), postSearchCondition.getContents(), postSearchCondition.getWriter())
+				)
+				.orderBy(board.boardSn.asc(), post.postSn.asc())
+				.fetch();
 	}
 
 	private Predicate boardSnEq(Integer boardSn) {

@@ -84,7 +84,7 @@ public class CodeGrpService {
 	}
 
 	public ResponseMessage search(CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
-		List<CodeGrpResponseDTO> list = codeGrpSearchRepository.search(CodeGrpSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getDesc1(), input.getDesc2()));
+		List<CodeGrpResponseDTO> list = codeGrpSearchRepository.search(CodeGrpSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getDesc1(), input.getDesc2(), input.getUseYn()));
 
 		if(list.size() == 0) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
