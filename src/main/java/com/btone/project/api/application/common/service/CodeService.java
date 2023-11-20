@@ -1,4 +1,4 @@
-package com.btone.project.api.application.board.service;
+package com.btone.project.api.application.common.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,14 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.btone.project.api.application.board.domain.condition.PostSearchCondition;
-import com.btone.project.api.application.board.domain.model.Board;
-import com.btone.project.api.application.board.domain.model.Post;
-import com.btone.project.api.application.board.domain.repository.BoardRepository;
-import com.btone.project.api.application.board.domain.repository.PostRepository;
-import com.btone.project.api.application.board.domain.repository.PostSearchRepository;
-import com.btone.project.api.application.board.dto.request.PostRequestDTO;
-import com.btone.project.api.application.board.dto.response.PostResponseDTO;
+import com.btone.project.api.application.common.domain.condition.CodeSearchCondition;
+import com.btone.project.api.application.common.domain.model.Code;
+import com.btone.project.api.application.common.domain.model.CodeGrp;
+import com.btone.project.api.application.common.domain.repository.CodeGrpRepository;
+import com.btone.project.api.application.common.domain.repository.CodeRepository;
+import com.btone.project.api.application.common.domain.repository.CodeSearchRepository;
+import com.btone.project.api.application.common.dto.request.CodeRequestDTO;
+import com.btone.project.api.application.common.dto.response.CodeResponseDTO;
 import com.btone.project.api.common.domain.model.ResponseMessage;
 import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
@@ -28,14 +28,14 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class PostService {
+public class CodeService {
 
-	private final PostRepository repository;
-	private final PostSearchRepository postSearchRepository;
-	private final BoardRepository boardRepository;
+	private final CodeRepository repository;
+	private final CodeSearchRepository codeSearchRepository;
+	private final CodeGrpRepository codeGrpRepository;
 	private final MessageSourceAccessor messageSource;
 
-	public ResponseMessage methods(String method, PostRequestDTO input) {
+	public ResponseMessage methods(String method, CodeRequestDTO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(CommonMethods.CREATE.getKey().equals(method)) {
@@ -49,28 +49,29 @@ public class PostService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
-	public ResponseMessage create(PostRequestDTO input, Map<String, Object> searchKeys) {
+	public ResponseMessage create(CodeRequestDTO input, Map<String, Object> searchKeys) {
 		try {
 			searchKeys.put("delYn", "N");
-			searchKeys.put("boardSn", input.getBoardSn());
-			Optional<Board> optionalBoard = boardRepository.findOne(CommonSpecification.searchCondition(searchKeys));
+			searchKeys.put("grpCd", input.getGrpCd());
+			Optional<CodeGrp> optionalCodeGrp = codeGrpRepository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalBoard.isEmpty()) {
+			if(optionalCodeGrp.isEmpty()) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
 			}
 
-			Board board = Board.builder()
-					.boardSn(input.getBoardSn())
+			CodeGrp codeGrp = CodeGrp.builder()
+					.grpCd(input.getGrpCd())
 					.build();
 
-			Post post = Post.builder()
-					.board(board)
-					.title(input.getTitle())
-					.contents(input.getContents())
-					.writer(input.getWriter())
+			Code code = Code.builder()
+					.codeGrp(codeGrp)
+					.code(input.getCode())
+					.codeNm(input.getCodeNm())
+					.desc1(input.getDesc1())
+					.desc2(input.getDesc2())
 					.build();
 
-			repository.save(post);
+			repository.save(code);
 		} catch (Exception e) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
@@ -78,26 +79,28 @@ public class PostService {
 		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
-	public ResponseMessage update(String method, PostRequestDTO input, Map<String, Object> searchKeys) {
+	public ResponseMessage update(String method, CodeRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		Post post = null;
+		Code code = null;
 		try {
 			searchKeys.put("delYn", "N");
-			searchKeys.put("postSn", input.getPostSn());
-			Optional<Post> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+			searchKeys.put("grpCd", input.getGrpCd());
+			searchKeys.put("code", input.getCode());
+			Optional<Code> optionalCode = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalRole.isEmpty()) {
+			if(optionalCode.isEmpty()) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
 			}
 
-			post = optionalRole.get();
+			code = optionalCode.get();
 
 			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				post.setTitle(input.getTitle());
-				post.setContents(input.getContents());
+				code.setCodeNm(input.getCodeNm());
+				code.setDesc1(input.getDesc1());
+				code.setDesc2(input.getDesc2());
 				message = messageSource.getMessage("post.update.success");
 			}else {
-				post.setDelYn("Y");
+				code.setDelYn("Y");
 				message = messageSource.getMessage("post.delete.success");
 			}
 		} catch (Exception e) {
@@ -107,10 +110,10 @@ public class PostService {
 		return ResponseMessage.ok(null, message, null);
 	}
 
-	public ResponseMessage search(PostRequestDTO input, Map<String, Object> searchKeys) {
-		List<PostResponseDTO> list = new ArrayList<>();
+	public ResponseMessage search(CodeRequestDTO input, Map<String, Object> searchKeys) {
+		List<CodeResponseDTO> list = new ArrayList<>();
 		try {
-			list = postSearchRepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
+			list = codeSearchRepository.search(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCode(), input.getCodeNm(), input.getDesc1(), input.getDesc2()));
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);

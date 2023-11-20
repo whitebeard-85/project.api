@@ -1,4 +1,4 @@
-package com.btone.project.api.application.board.service;
+package com.btone.project.api.application.common.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,45 +11,28 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.btone.project.api.application.board.domain.model.Board;
-import com.btone.project.api.application.board.domain.repository.BoardRepository;
-import com.btone.project.api.application.board.dto.request.BoardRequestDTO;
-import com.btone.project.api.application.board.enums.BoardType;
+import com.btone.project.api.application.common.domain.condition.CodeGrpSearchCondition;
+import com.btone.project.api.application.common.domain.model.CodeGrp;
+import com.btone.project.api.application.common.domain.repository.CodeGrpRepository;
+import com.btone.project.api.application.common.domain.repository.CodeGrpSearchRepository;
+import com.btone.project.api.application.common.dto.request.CodeGrpRequestDTO;
+import com.btone.project.api.application.common.dto.response.CodeGrpResponseDTO;
 import com.btone.project.api.common.domain.model.ResponseMessage;
 import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
 
 import lombok.RequiredArgsConstructor;
 
-/**
-* @packageName   : com.btone.project.api.application.board.service
-* @fileName      : BoardService.java
-* @author        : 오수병
-* @date          : 2023.11.15
-* @description   : 게시판관리 서비스
-* ===========================================================
-* DATE              AUTHOR             NOTE
-* -----------------------------------------------------------
-* 2023.11.15        오수병                최초 생성
-*/
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class BoardService {
+public class CodeGrpService {
 
-	private final BoardRepository repository;
+	private final CodeGrpRepository repository;
+	private final CodeGrpSearchRepository codeGrpSearchRepository;
 	private final MessageSourceAccessor messageSource;
 
-	/**
-	* @methodName  : methods
-	* @author      : 오수병
-	* @date        : 2023.11.15
-	* @description : 게시판관리
-	* @param method
-	* @param input
-	* @return
-	*/
-	public ResponseMessage methods(String method, BoardRequestDTO input) {
+	public ResponseMessage methods(String method, CodeGrpRequestDTO input) {
 		Map<String, Object> searchKeys = new HashMap<>();
 
 		if(CommonMethods.CREATE.getKey().equals(method)) {
@@ -63,23 +46,16 @@ public class BoardService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
-	/**
-	* @methodName  : create
-	* @author      : 오수병
-	* @date        : 2023.11.15
-	* @description : 게시판등록
-	* @param input
-	* @return
-	*/
-	public ResponseMessage create(BoardRequestDTO input) {
+	public ResponseMessage create(CodeGrpRequestDTO input) {
 		try {
-			Board board = Board.builder()
-					.boardType(BoardType.find(input.getBoardType()))
-					.boardNm(input.getBoardNm())
-					.boardDesc(input.getBoardDesc())
+			CodeGrp codeGrp = CodeGrp.builder()
+					.grpCd(input.getGrpCd())
+					.grpCdNm(input.getGrpCdNm())
+					.desc1(input.getDesc1())
+					.desc2(input.getDesc2())
 					.build();
 
-			repository.save(board);
+			repository.save(codeGrp);
 		} catch (Exception e) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
@@ -87,36 +63,27 @@ public class BoardService {
 		return ResponseMessage.ok(null, messageSource.getMessage("board.create.success"), null);
 	}
 
-	/**
-	* @methodName  : ud
-	* @author      : 오수병
-	* @date        : 2023.11.15
-	* @description : 게시판 수정/삭제
-	* @param method
-	* @param input
-	* @param searchKeys
-	* @return
-	*/
-	public ResponseMessage update(String method, BoardRequestDTO input, Map<String, Object> searchKeys) {
+	public ResponseMessage update(String method, CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		Board board = null;
+		CodeGrp codeGrp = null;
 		try {
 			searchKeys.put("delYn", "N");
-			searchKeys.put("boardSn", input.getBoardSn());
-			Optional<Board> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+			searchKeys.put("grpCd", input.getGrpCd());
+			Optional<CodeGrp> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
 			if(optionalRole.isEmpty()) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
 			}
 
-			board = optionalRole.get();
+			codeGrp = optionalRole.get();
 
 			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				board.setBoardNm(input.getBoardNm());
-				board.setBoardDesc(input.getBoardDesc());
+				codeGrp.setGrpCdNm(input.getGrpCdNm());
+				codeGrp.setDesc1(input.getDesc1());
+				codeGrp.setDesc2(input.getDesc2());
 				message = messageSource.getMessage("board.update.success");
 			}else {
-				board.setDelYn("Y");
+				codeGrp.setDelYn("Y");
 				message = messageSource.getMessage("board.delete.success");
 			}
 		} catch (Exception e) {
@@ -126,19 +93,10 @@ public class BoardService {
 		return ResponseMessage.ok(null, message, null);
 	}
 
-	/**
-	* @methodName  : search
-	* @author      : 오수병
-	* @date        : 2023.11.15
-	* @description : 게시판목록 조회
-	* @param input
-	* @param searchKeys
-	* @return
-	*/
-	public ResponseMessage search(BoardRequestDTO input, Map<String, Object> searchKeys) {
-		List<Board> list = new ArrayList<>();
+	public ResponseMessage search(CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
+		List<CodeGrpResponseDTO> list = new ArrayList<>();
 		try {
-			list = repository.findAll();
+			list = codeGrpSearchRepository.search(CodeGrpSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getDesc1(), input.getDesc2()));
 
 			if(list.size() == 0) {
 				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);

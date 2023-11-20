@@ -1,9 +1,8 @@
 package com.btone.project.api.application.board.dto.response;
 
-import com.querydsl.core.types.dsl.*;
+import javax.annotation.processing.Generated;
 
 import com.querydsl.core.types.ConstructorExpression;
-import javax.annotation.processing.Generated;
 
 /**
  * com.btone.project.api.application.board.dto.response.QPostResponseDTO is a Querydsl Projection type for PostResponseDTO
