@@ -1,6 +1,5 @@
 package com.btone.project.api.application.board.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,17 +71,13 @@ public class BoardService {
 	* @return
 	*/
 	public ResponseMessage create(BoardRequestDTO input) {
-		try {
-			Board board = Board.builder()
-					.boardType(BoardType.find(input.getBoardType()))
-					.boardNm(input.getBoardNm())
-					.boardDesc(input.getBoardDesc())
-					.build();
+		Board board = Board.builder()
+				.boardType(BoardType.find(input.getBoardType()))
+				.boardNm(input.getBoardNm())
+				.boardDesc(input.getBoardDesc())
+				.build();
 
-			repository.save(board);
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
-		}
+		repository.save(board);
 
 		return ResponseMessage.ok(null, messageSource.getMessage("board.create.success"), null);
 	}
@@ -99,28 +94,23 @@ public class BoardService {
 	*/
 	public ResponseMessage update(String method, BoardRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		Board board = null;
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("boardSn", input.getBoardSn());
-			Optional<Board> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("boardSn", input.getBoardSn());
+		Optional<Board> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalRole.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
-			}
+		if(optionalRole.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
+		}
 
-			board = optionalRole.get();
+		Board board = optionalRole.get();
 
-			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				board.setBoardNm(input.getBoardNm());
-				board.setBoardDesc(input.getBoardDesc());
-				message = messageSource.getMessage("board.update.success");
-			}else {
-				board.setDelYn("Y");
-				message = messageSource.getMessage("board.delete.success");
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(CommonMethods.UPDATE.getKey().equals(method)) {
+			board.setBoardNm(input.getBoardNm());
+			board.setBoardDesc(input.getBoardDesc());
+			message = messageSource.getMessage("board.update.success");
+		}else {
+			board.setDelYn("Y");
+			message = messageSource.getMessage("board.delete.success");
 		}
 
 		return ResponseMessage.ok(null, message, null);
@@ -136,15 +126,10 @@ public class BoardService {
 	* @return
 	*/
 	public ResponseMessage search(BoardRequestDTO input, Map<String, Object> searchKeys) {
-		List<Board> list = new ArrayList<>();
-		try {
-			list = repository.findAll();
+		List<Board> list = repository.findAll();
 
-			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(list.size() == 0) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
 		}
 
 		return ResponseMessage.ok(list, messageSource.getMessage("board.search.success"), null);

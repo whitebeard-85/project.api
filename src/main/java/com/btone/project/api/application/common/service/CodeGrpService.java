@@ -1,6 +1,5 @@
 package com.btone.project.api.application.common.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,62 +46,48 @@ public class CodeGrpService {
 	}
 
 	public ResponseMessage create(CodeGrpRequestDTO input) {
-		try {
-			CodeGrp codeGrp = CodeGrp.builder()
-					.grpCd(input.getGrpCd())
-					.grpCdNm(input.getGrpCdNm())
-					.desc1(input.getDesc1())
-					.desc2(input.getDesc2())
-					.build();
+		CodeGrp codeGrp = CodeGrp.builder()
+				.grpCd(input.getGrpCd())
+				.grpCdNm(input.getGrpCdNm())
+				.desc1(input.getDesc1())
+				.desc2(input.getDesc2())
+				.build();
 
-			repository.save(codeGrp);
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
-		}
+		repository.save(codeGrp);
 
 		return ResponseMessage.ok(null, messageSource.getMessage("board.create.success"), null);
 	}
 
 	public ResponseMessage update(String method, CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		CodeGrp codeGrp = null;
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("grpCd", input.getGrpCd());
-			Optional<CodeGrp> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("grpCd", input.getGrpCd());
+		Optional<CodeGrp> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalRole.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
-			}
+		if(optionalRole.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
+		}
 
-			codeGrp = optionalRole.get();
+		CodeGrp codeGrp = optionalRole.get();
 
-			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				codeGrp.setGrpCdNm(input.getGrpCdNm());
-				codeGrp.setDesc1(input.getDesc1());
-				codeGrp.setDesc2(input.getDesc2());
-				message = messageSource.getMessage("board.update.success");
-			}else {
-				codeGrp.setDelYn("Y");
-				message = messageSource.getMessage("board.delete.success");
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(CommonMethods.UPDATE.getKey().equals(method)) {
+			codeGrp.setGrpCdNm(input.getGrpCdNm());
+			codeGrp.setDesc1(input.getDesc1());
+			codeGrp.setDesc2(input.getDesc2());
+			message = messageSource.getMessage("board.update.success");
+		}else {
+			codeGrp.setDelYn("Y");
+			message = messageSource.getMessage("board.delete.success");
 		}
 
 		return ResponseMessage.ok(null, message, null);
 	}
 
 	public ResponseMessage search(CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
-		List<CodeGrpResponseDTO> list = new ArrayList<>();
-		try {
-			list = codeGrpSearchRepository.search(CodeGrpSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getDesc1(), input.getDesc2()));
+		List<CodeGrpResponseDTO> list = codeGrpSearchRepository.search(CodeGrpSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getDesc1(), input.getDesc2()));
 
-			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(list.size() == 0) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("board.notexists"), null);
 		}
 
 		return ResponseMessage.ok(list, messageSource.getMessage("board.search.success"), null);

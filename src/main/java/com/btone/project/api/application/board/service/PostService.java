@@ -1,6 +1,5 @@
 package com.btone.project.api.application.board.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,69 +49,55 @@ public class PostService {
 	}
 
 	public ResponseMessage create(PostRequestDTO input, Map<String, Object> searchKeys) {
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("boardSn", input.getBoardSn());
-			Optional<Board> optionalBoard = boardRepository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("boardSn", input.getBoardSn());
+		Optional<Board> optionalBoard = boardRepository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalBoard.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
-			}
-
-			Post post = Post.builder()
-					.boardSn(input.getBoardSn())
-					.title(input.getTitle())
-					.contents(input.getContents())
-					.writer(input.getWriter())
-					.build();
-
-			repository.save(post);
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(optionalBoard.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
 		}
+
+		Post post = Post.builder()
+				.boardSn(input.getBoardSn())
+				.title(input.getTitle())
+				.contents(input.getContents())
+				.writer(input.getWriter())
+				.build();
+
+		repository.save(post);
 
 		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
 	public ResponseMessage update(String method, PostRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		Post post = null;
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("postSn", input.getPostSn());
-			Optional<Post> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("postSn", input.getPostSn());
+		Optional<Post> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalRole.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
-			}
+		if(optionalRole.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
+		}
 
-			post = optionalRole.get();
+		Post post = optionalRole.get();
 
-			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				post.setTitle(input.getTitle());
-				post.setContents(input.getContents());
-				message = messageSource.getMessage("post.update.success");
-			}else {
-				post.setDelYn("Y");
-				message = messageSource.getMessage("post.delete.success");
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(CommonMethods.UPDATE.getKey().equals(method)) {
+			post.setTitle(input.getTitle());
+			post.setContents(input.getContents());
+			message = messageSource.getMessage("post.update.success");
+		}else {
+			post.setDelYn("Y");
+			message = messageSource.getMessage("post.delete.success");
 		}
 
 		return ResponseMessage.ok(null, message, null);
 	}
 
 	public ResponseMessage search(PostRequestDTO input, Map<String, Object> searchKeys) {
-		List<PostResponseDTO> list = new ArrayList<>();
-		try {
-			list = postSearchRepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
+		List<PostResponseDTO> list = postSearchRepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
 
-			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(list.size() == 0) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
 		}
 
 		return ResponseMessage.ok(list, messageSource.getMessage("post.search.success"), null);

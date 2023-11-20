@@ -5,15 +5,11 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.btone.project.api.application.auth.domain.model.User;
 import com.btone.project.api.common.util.PasswordConverter;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -33,9 +29,15 @@ import lombok.Setter;
 @DynamicInsert
 @DynamicUpdate
 public class UserLog {
+
+	@Id
     private Integer userSn;
+
 	private String userId;
+
+	@Convert(converter = PasswordConverter.class)
     private String pwd; // 비밀번호
+
     private String actvNm; // 닉네임
 
     @ColumnDefault("'Y'")

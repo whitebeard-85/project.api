@@ -6,17 +6,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.btone.project.api.common.domain.model.BaseTimeEntity;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.IdClass;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,16 +30,13 @@ import lombok.Setter;
 @EntityListeners(AuditingEntityListener.class)
 @DynamicInsert
 @DynamicUpdate
+@IdClass(CodePK.class)
 public class Code extends BaseTimeEntity {
 
 	@Id
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "grp_cd")
-	@JsonBackReference
-	private CodeGrp codeGrp;
+	private String grpCd;
 
 	@Id
-    @Column(name = "code")
     private String cd;
 
 	private String cdNm;

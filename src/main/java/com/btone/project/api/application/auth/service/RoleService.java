@@ -1,6 +1,5 @@
 package com.btone.project.api.application.auth.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -83,29 +82,24 @@ public class RoleService {
 	* @return
 	*/
 	public ResponseMessage create(RoleRequestDTO input, Map<String, Object> searchKeys) {
-		try {
-			searchKeys.put("roleCd", input.getRoleCd());
-			List<Role> list = repository.findAll(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("roleCd", input.getRoleCd());
+		List<Role> list = repository.findAll(CommonSpecification.searchCondition(searchKeys));
 
-			if(list.size() > 0) {
-				if("Y".equals(list.get(0).getDelYn())) {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.deleted"), null);
-				}else {
-					return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.duplicated"), null);
-				}
+		if(list.size() > 0) {
+			if("Y".equals(list.get(0).getDelYn())) {
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.deleted"), null);
+			}else {
+				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.checkcd.duplicated"), null);
 			}
-
-			Role role = Role.builder()
-					.roleCd(input.getRoleCd())
-					.roleNm(input.getRoleNm())
-					.roleDesc(input.getRoleDesc())
-					.build();
-
-			repository.save(role);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
 		}
+
+		Role role = Role.builder()
+				.roleCd(input.getRoleCd())
+				.roleNm(input.getRoleNm())
+				.roleDesc(input.getRoleDesc())
+				.build();
+
+		repository.save(role);
 
 		return ResponseMessage.ok(null, messageSource.getMessage("role.create.success"), null);
 	}
@@ -122,28 +116,23 @@ public class RoleService {
 	*/
 	public ResponseMessage update(String method, RoleRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		Role role = null;
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("roleCd", input.getRoleCd());
-			Optional<Role> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("roleCd", input.getRoleCd());
+		Optional<Role> optionalRole = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalRole.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"), null);
-			}
+		if(optionalRole.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"), null);
+		}
 
-			role = optionalRole.get();
+		Role role = optionalRole.get();
 
-			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				role.setRoleNm(input.getRoleNm());
-				role.setRoleDesc(input.getRoleDesc());
-				message = messageSource.getMessage("role.update.success");
-			}else {
-				role.setDelYn("Y");
-				message = messageSource.getMessage("role.delete.success");
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(CommonMethods.UPDATE.getKey().equals(method)) {
+			role.setRoleNm(input.getRoleNm());
+			role.setRoleDesc(input.getRoleDesc());
+			message = messageSource.getMessage("role.update.success");
+		}else {
+			role.setDelYn("Y");
+			message = messageSource.getMessage("role.delete.success");
 		}
 
 		return ResponseMessage.ok(null, message, null);
@@ -159,15 +148,10 @@ public class RoleService {
 	* @return
 	*/
 	public ResponseMessage search(RoleRequestDTO input, Map<String, Object> searchKeys) {
-		List<Role> list = new ArrayList<>();
-		try {
-			list = repository.findAll();
+		List<Role> list = repository.findAll();
 
-			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"), null);
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(list.size() == 0) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("role.notexists"), null);
 		}
 
 		return ResponseMessage.ok(list, messageSource.getMessage("role.search.success"), null);

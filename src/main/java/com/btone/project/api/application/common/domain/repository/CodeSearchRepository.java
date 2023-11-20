@@ -24,10 +24,9 @@ public class CodeSearchRepository {
 	}
 
 	public List<CodeResponseDTO> search(CodeSearchCondition codeGrpSearchCondition){
-//		return jpaQueryFactory.select(new QCodeResponseDTO(codeGrp.grpCd, code.cd, code.cdNm, code.desc1, code.desc2, code.createdDate, code.modifiedDate))
-//				.from(code).leftJoin(codeGrp)
-//				.on(code.grpCd.eq(codeGrp.grpCd)))
-//				.fetch();
-		return null;
+		return jpaQueryFactory.select(new QCodeResponseDTO(code.grpCd, code.cd, code.cdNm, code.desc1, code.desc2, code.sort, code.useYn, code.delYn, code.createdDate, code.modifiedDate))
+				.from(code).leftJoin(codeGrp)
+				.on(code.grpCd.eq(codeGrp.grpCd))
+				.fetch();
 	}
 }

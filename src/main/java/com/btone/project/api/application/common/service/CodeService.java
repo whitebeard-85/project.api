@@ -1,6 +1,5 @@
 package com.btone.project.api.application.common.service;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,76 +49,58 @@ public class CodeService {
 	}
 
 	public ResponseMessage create(CodeRequestDTO input, Map<String, Object> searchKeys) {
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("grpCd", input.getGrpCd());
-			Optional<CodeGrp> optionalCodeGrp = codeGrpRepository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("grpCd", input.getGrpCd());
+		Optional<CodeGrp> optionalCodeGrp = codeGrpRepository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalCodeGrp.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
-			}
-
-			CodeGrp codeGrp = CodeGrp.builder()
-					.grpCd(input.getGrpCd())
-					.build();
-
-			Code code = Code.builder()
-					.codeGrp(codeGrp)
-					.cd(input.getCd())
-					.cdNm(input.getCdNm())
-					.desc1(input.getDesc1())
-					.desc2(input.getDesc2())
-					.build();
-
-			repository.save(code);
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(optionalCodeGrp.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.board.notexists"), null);
 		}
+
+		Code code = Code.builder()
+				.grpCd(input.getGrpCd())
+				.cd(input.getCd())
+				.cdNm(input.getCdNm())
+				.desc1(input.getDesc1())
+				.desc2(input.getDesc2())
+				.build();
+
+		repository.save(code);
 
 		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
 	public ResponseMessage update(String method, CodeRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
-		Code code = null;
-		try {
-			searchKeys.put("delYn", "N");
-			searchKeys.put("grpCd", input.getGrpCd());
-			searchKeys.put("code", input.getCd());
-			Optional<Code> optionalCode = repository.findOne(CommonSpecification.searchCondition(searchKeys));
+		searchKeys.put("delYn", "N");
+		searchKeys.put("grpCd", input.getGrpCd());
+		searchKeys.put("code", input.getCd());
+		Optional<Code> optionalCode = repository.findOne(CommonSpecification.searchCondition(searchKeys));
 
-			if(optionalCode.isEmpty()) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
-			}
+		if(optionalCode.isEmpty()) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
+		}
 
-			code = optionalCode.get();
+		Code code = optionalCode.get();
 
-			if(CommonMethods.UPDATE.getKey().equals(method)) {
-				code.setCdNm(input.getCdNm());
-				code.setDesc1(input.getDesc1());
-				code.setDesc2(input.getDesc2());
-				message = messageSource.getMessage("post.update.success");
-			}else {
-				code.setDelYn("Y");
-				message = messageSource.getMessage("post.delete.success");
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(CommonMethods.UPDATE.getKey().equals(method)) {
+			code.setCdNm(input.getCdNm());
+			code.setDesc1(input.getDesc1());
+			code.setDesc2(input.getDesc2());
+			message = messageSource.getMessage("post.update.success");
+		}else {
+			code.setDelYn("Y");
+			message = messageSource.getMessage("post.delete.success");
 		}
 
 		return ResponseMessage.ok(null, message, null);
 	}
 
 	public ResponseMessage search(CodeRequestDTO input, Map<String, Object> searchKeys) {
-		List<CodeResponseDTO> list = new ArrayList<>();
-		try {
-			list = codeSearchRepository.search(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCd(), input.getCdNm(), input.getDesc1(), input.getDesc2()));
+		List<CodeResponseDTO> list = codeSearchRepository.search(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCd(), input.getCdNm(), input.getDesc1(), input.getDesc2()));
 
-			if(list.size() == 0) {
-				return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
-			}
-		} catch (Exception e) {
-			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("common.error"), e.getMessage());
+		if(list.size() == 0) {
+			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);
 		}
 
 		return ResponseMessage.ok(list, messageSource.getMessage("post.search.success"), null);

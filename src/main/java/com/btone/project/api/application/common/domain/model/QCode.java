@@ -1,13 +1,14 @@
 package com.btone.project.api.application.common.domain.model;
 
-import static com.querydsl.core.types.PathMetadataFactory.*;
+import static com.querydsl.core.types.PathMetadataFactory.forVariable;
 
-import com.querydsl.core.types.dsl.*;
-
-import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
+
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
+import com.querydsl.core.types.PathMetadata;
+import com.querydsl.core.types.dsl.EntityPathBase;
+import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 
 
 /**
@@ -18,8 +19,6 @@ public class QCode extends EntityPathBase<Code> {
 
     private static final long serialVersionUID = 1658651175L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QCode code = new QCode("code");
 
     public final com.btone.project.api.common.domain.model.QBaseTimeEntity _super = new com.btone.project.api.common.domain.model.QBaseTimeEntity(this);
@@ -27,8 +26,6 @@ public class QCode extends EntityPathBase<Code> {
     public final StringPath cd = createString("cd");
 
     public final StringPath cdNm = createString("cdNm");
-
-    public final QCodeGrp codeGrp;
 
     //inherited
     public final StringPath createdDate = _super.createdDate;
@@ -39,6 +36,8 @@ public class QCode extends EntityPathBase<Code> {
 
     public final StringPath desc2 = createString("desc2");
 
+    public final StringPath grpCd = createString("grpCd");
+
     //inherited
     public final StringPath modifiedDate = _super.modifiedDate;
 
@@ -47,24 +46,15 @@ public class QCode extends EntityPathBase<Code> {
     public final StringPath useYn = createString("useYn");
 
     public QCode(String variable) {
-        this(Code.class, forVariable(variable), INITS);
+        super(Code.class, forVariable(variable));
     }
 
     public QCode(Path<? extends Code> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+    	super(path.getType(), path.getMetadata());
     }
 
     public QCode(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QCode(PathMetadata metadata, PathInits inits) {
-        this(Code.class, metadata, inits);
-    }
-
-    public QCode(Class<? extends Code> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.codeGrp = inits.isInitialized("codeGrp") ? new QCodeGrp(forProperty("codeGrp")) : null;
+    	super(Code.class, metadata);
     }
 
 }
