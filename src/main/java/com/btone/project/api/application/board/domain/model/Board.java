@@ -5,14 +5,11 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.btone.project.api.application.board.enums.BoardType;
 import com.btone.project.api.common.domain.model.BaseTimeEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -51,10 +48,7 @@ public class Board extends BaseTimeEntity {
     @Column(name = "board_sn")
     private Integer boardSn;
 
-	@Enumerated(EnumType.STRING)
-	@ColumnDefault("'GENERAL'")
-	private BoardType boardType;
-
+	private String boardTypeCd;
 	private String boardNm;
 	private String boardDesc;
 	private String startDate;

@@ -6,7 +6,7 @@ import lombok.Data;
 public class BoardRequestDTO {
 
 	private Integer boardSn;
-	private String boardType;
+	private String boardTypeCd;
 	private String boardNm;
 	private String boardDesc;
 	private String startDate;

@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.btone.project.api.application.board.domain.model.Board;
 import com.btone.project.api.application.board.domain.repository.BoardRepository;
 import com.btone.project.api.application.board.dto.request.BoardRequestDTO;
-import com.btone.project.api.application.board.enums.BoardType;
 import com.btone.project.api.common.domain.model.ResponseMessage;
 import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
@@ -72,7 +71,7 @@ public class BoardService {
 	*/
 	public ResponseMessage create(BoardRequestDTO input) {
 		Board board = Board.builder()
-				.boardType(BoardType.find(input.getBoardType()))
+				.boardTypeCd(input.getBoardTypeCd())
 				.boardNm(input.getBoardNm())
 				.boardDesc(input.getBoardDesc())
 				.build();

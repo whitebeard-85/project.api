@@ -27,7 +27,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final NumberPath<Integer> boardSn = createNumber("boardSn", Integer.class);
 
-    public final EnumPath<com.btone.project.api.application.board.enums.BoardType> boardType = createEnum("boardType", com.btone.project.api.application.board.enums.BoardType.class);
+    public final StringPath boardTypeCd = createString("boardTypeCd");
 
     //inherited
     public final StringPath createdDate = _super.createdDate;
