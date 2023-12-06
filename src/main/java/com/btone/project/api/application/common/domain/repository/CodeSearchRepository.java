@@ -23,7 +23,14 @@ public class CodeSearchRepository {
 		this.jpaQueryFactory = new JPAQueryFactory(entityManager);
 	}
 
-	public List<CodeResponseDTO> search(CodeSearchCondition codeGrpSearchCondition){
+	public CodeResponseDTO search(CodeSearchCondition codeGrpSearchCondition){
+		return jpaQueryFactory.select(new QCodeResponseDTO(code.grpCd, code.cd, code.cdNm, code.desc1, code.desc2, code.sort, code.useYn, code.delYn, code.createdDate, code.modifiedDate))
+				.from(code).leftJoin(codeGrp)
+				.on(code.grpCd.eq(codeGrp.grpCd))
+				.fetchOne();
+	}
+
+	public List<CodeResponseDTO> searchList(CodeSearchCondition codeGrpSearchCondition){
 		return jpaQueryFactory.select(new QCodeResponseDTO(code.grpCd, code.cd, code.cdNm, code.desc1, code.desc2, code.sort, code.useYn, code.delYn, code.createdDate, code.modifiedDate))
 				.from(code).leftJoin(codeGrp)
 				.on(code.grpCd.eq(codeGrp.grpCd))

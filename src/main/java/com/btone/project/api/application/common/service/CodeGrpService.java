@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CodeGrpService {
 
 	private final CodeGrpRepository repository;
@@ -45,6 +44,7 @@ public class CodeGrpService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
+	@Transactional
 	public ResponseMessage create(CodeGrpRequestDTO input) {
 		CodeGrp codeGrp = CodeGrp.builder()
 				.grpCd(input.getGrpCd())
@@ -58,6 +58,7 @@ public class CodeGrpService {
 		return ResponseMessage.ok(null, messageSource.getMessage("board.create.success"), null);
 	}
 
+	@Transactional
 	public ResponseMessage update(String method, CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		searchKeys.put("delYn", "N");
@@ -83,6 +84,7 @@ public class CodeGrpService {
 		return ResponseMessage.ok(null, message, null);
 	}
 
+	@Transactional
 	public ResponseMessage search(CodeGrpRequestDTO input, Map<String, Object> searchKeys) {
 		List<CodeGrpResponseDTO> list = codeGrpSearchRepository.search(CodeGrpSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getDesc1(), input.getDesc2(), input.getUseYn()));
 

@@ -18,6 +18,9 @@ import com.btone.project.api.application.board.domain.repository.PostRepository;
 import com.btone.project.api.application.board.domain.repository.PostSearchRepository;
 import com.btone.project.api.application.board.dto.request.PostRequestDTO;
 import com.btone.project.api.application.board.dto.response.PostResponseDTO;
+import com.btone.project.api.application.common.domain.model.File;
+import com.btone.project.api.application.common.domain.repository.FileRepository;
+import com.btone.project.api.application.common.dto.request.FileRequestDTO;
 import com.btone.project.api.common.domain.model.ResponseMessage;
 import com.btone.project.api.common.domain.specification.CommonSpecification;
 import com.btone.project.api.common.enums.CommonMethods;
@@ -26,12 +29,12 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class PostService {
 
 	private final PostRepository repository;
 	private final PostSearchRepository postSearchRepository;
 	private final BoardRepository boardRepository;
+	private final FileRepository fileRepository;
 	private final MessageSourceAccessor messageSource;
 
 	public ResponseMessage methods(String method, PostRequestDTO input) {
@@ -48,6 +51,7 @@ public class PostService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
+	@Transactional
 	public ResponseMessage create(PostRequestDTO input, Map<String, Object> searchKeys) {
 		searchKeys.put("delYn", "N");
 		searchKeys.put("boardSn", input.getBoardSn());
@@ -66,9 +70,28 @@ public class PostService {
 
 		repository.save(post);
 
+		if(input.getFileList() != null && input.getFileList().size() > 0) {
+			List<FileRequestDTO> fileRequestDTOList = input.getFileList();
+
+			for(FileRequestDTO fileRequestDTO : fileRequestDTOList) {
+				File file = File.builder()
+						.parentId("post")
+						.parentSn(post.getPostSn())
+						.uploadPath(fileRequestDTO.getUploadPath())
+						.originalFileName(fileRequestDTO.getOriginalFileName())
+						.uploadFileName(fileRequestDTO.getUploadFileName())
+						.fileSize(fileRequestDTO.getFileSize())
+						.fileExt(fileRequestDTO.getFileExt())
+						.build();
+
+				fileRepository.save(file);
+			}
+		}
+
 		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
+	@Transactional
 	public ResponseMessage update(String method, PostRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		searchKeys.put("delYn", "N");
@@ -93,6 +116,7 @@ public class PostService {
 		return ResponseMessage.ok(null, message, null);
 	}
 
+	@Transactional
 	public ResponseMessage search(PostRequestDTO input, Map<String, Object> searchKeys) {
 		List<PostResponseDTO> list = postSearchRepository.search(PostSearchCondition.build(input.getBoardSn(), input.getPostSn(), input.getTitle(), input.getContents(), input.getWriter()));
 

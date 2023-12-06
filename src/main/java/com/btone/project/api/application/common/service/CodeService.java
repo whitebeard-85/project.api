@@ -26,7 +26,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class CodeService {
 
 	private final CodeRepository repository;
@@ -48,6 +47,7 @@ public class CodeService {
 		return ResponseMessage.of(null, HttpStatus.BAD_REQUEST, messageSource.getMessage("common.error.wrong-method"), null);
 	}
 
+	@Transactional
 	public ResponseMessage create(CodeRequestDTO input, Map<String, Object> searchKeys) {
 		searchKeys.put("delYn", "N");
 		searchKeys.put("grpCd", input.getGrpCd());
@@ -70,6 +70,7 @@ public class CodeService {
 		return ResponseMessage.ok(null, messageSource.getMessage("post.create.success"), null);
 	}
 
+	@Transactional
 	public ResponseMessage update(String method, CodeRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		searchKeys.put("delYn", "N");
@@ -96,8 +97,9 @@ public class CodeService {
 		return ResponseMessage.ok(null, message, null);
 	}
 
+	@Transactional
 	public ResponseMessage search(CodeRequestDTO input, Map<String, Object> searchKeys) {
-		List<CodeResponseDTO> list = codeSearchRepository.search(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCd(), input.getCdNm(), input.getDesc1(), input.getDesc2()));
+		List<CodeResponseDTO> list = codeSearchRepository.searchList(CodeSearchCondition.build(input.getGrpCd(), input.getGrpCdNm(), input.getCd(), input.getCdNm(), input.getDesc1(), input.getDesc2()));
 
 		if(list.size() == 0) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("post.notexists"), null);

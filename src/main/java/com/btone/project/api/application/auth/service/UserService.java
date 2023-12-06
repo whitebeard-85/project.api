@@ -11,14 +11,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.btone.project.api.application.auth.domain.condition.UserSearchCondition;
-import com.btone.project.api.application.auth.domain.model.Role;
 import com.btone.project.api.application.auth.domain.model.User;
-import com.btone.project.api.application.auth.domain.repository.RoleRepository;
 import com.btone.project.api.application.auth.domain.repository.UserRepository;
 import com.btone.project.api.application.auth.domain.repository.UserSearchRepository;
 import com.btone.project.api.application.auth.dto.request.UserRequestDTO;
 import com.btone.project.api.application.auth.dto.response.UserResponseDTO;
 import com.btone.project.api.application.auth.enums.UserMethods;
+import com.btone.project.api.application.common.domain.condition.CodeSearchCondition;
+import com.btone.project.api.application.common.domain.repository.CodeSearchRepository;
+import com.btone.project.api.application.common.dto.response.CodeResponseDTO;
 import com.btone.project.api.application.log.domain.model.UserLog;
 import com.btone.project.api.application.log.domain.repository.UserLogRepository;
 import com.btone.project.api.common.domain.model.ResponseMessage;
@@ -41,13 +42,12 @@ import lombok.RequiredArgsConstructor;
 */
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserService {
 
 	private final UserRepository repository;
 	private final UserSearchRepository userSearchrepository;
 	private final UserLogRepository userLogRepository;
-	private final RoleRepository roleRepository;
+	private final CodeSearchRepository codeSearchRepository;
 	private final MessageSourceAccessor messageSource;
 
 	/**
@@ -83,6 +83,7 @@ public class UserService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage signup(String method, UserRequestDTO input, Map<String, Object> searchKeys) {
 		String message = messageSource.getMessage("user.signup.success");
 		searchKeys.put("userId", input.getUserId());
@@ -92,11 +93,9 @@ public class UserService {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.checkid.duplicated"), null);
 		}
 
-		searchKeys.clear();
-		searchKeys.put("roleCd", input.getRoleCd());
-		Optional<Role> role = roleRepository.findOne(CommonSpecification.searchCondition(searchKeys));
+		CodeResponseDTO code = codeSearchRepository.search(CodeSearchCondition.build("ROLE_CD", "", "", "", "", ""));
 
-		if(role.isEmpty()) {
+		if(code == null) {
 			return ResponseMessage.of(null, HttpStatus.INTERNAL_SERVER_ERROR, messageSource.getMessage("user.rolecd.notexists"), null);
 		}
 
@@ -105,7 +104,7 @@ public class UserService {
 					.userId(input.getUserId())
 					.pwd(input.getPwd())
 					.actvNm(input.getActvNm())
-					.roleCd(input.getRoleCd())
+					.roleCd(code.getCd())
 					.build();
 
 			repository.save(user);
@@ -115,7 +114,7 @@ public class UserService {
 					.userId(user.getUserId())
 					.pwd(user.getPwd())
 					.actvNm(user.getActvNm())
-					.roleCd(user.getRoleCd())
+					.roleCd(code.getCd())
 					.build();
 
 			userLogRepository.save(userLog);
@@ -136,6 +135,7 @@ public class UserService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage edit(String method, UserRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		searchKeys.put("delYn", "N");
@@ -175,6 +175,7 @@ public class UserService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage search(UserRequestDTO input, Map<String, Object> searchKeys) {
 		List<UserResponseDTO> list = userSearchrepository.search(UserSearchCondition.build(input.getActvNm(), input.getRoleCd(), input.getRoleNm()));
 

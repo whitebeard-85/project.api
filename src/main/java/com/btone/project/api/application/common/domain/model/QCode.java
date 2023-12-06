@@ -1,14 +1,12 @@
 package com.btone.project.api.application.common.domain.model;
 
-import static com.querydsl.core.types.PathMetadataFactory.forVariable;
+import static com.querydsl.core.types.PathMetadataFactory.*;
 
-import javax.annotation.processing.Generated;
+import com.querydsl.core.types.dsl.*;
 
-import com.querydsl.core.types.Path;
 import com.querydsl.core.types.PathMetadata;
-import com.querydsl.core.types.dsl.EntityPathBase;
-import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringPath;
+import javax.annotation.processing.Generated;
+import com.querydsl.core.types.Path;
 
 
 /**
@@ -50,11 +48,11 @@ public class QCode extends EntityPathBase<Code> {
     }
 
     public QCode(Path<? extends Code> path) {
-    	super(path.getType(), path.getMetadata());
+        super(path.getType(), path.getMetadata());
     }
 
     public QCode(PathMetadata metadata) {
-    	super(Code.class, metadata);
+        super(Code.class, metadata);
     }
 
 }

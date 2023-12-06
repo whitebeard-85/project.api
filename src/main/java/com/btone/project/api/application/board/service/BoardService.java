@@ -32,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 */
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class BoardService {
 
 	private final BoardRepository repository;
@@ -69,6 +68,7 @@ public class BoardService {
 	* @param input
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage create(BoardRequestDTO input) {
 		Board board = Board.builder()
 				.boardTypeCd(input.getBoardTypeCd())
@@ -91,6 +91,7 @@ public class BoardService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage update(String method, BoardRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		searchKeys.put("delYn", "N");
@@ -124,6 +125,7 @@ public class BoardService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage search(BoardRequestDTO input, Map<String, Object> searchKeys) {
 		List<Board> list = repository.findAll();
 

@@ -43,7 +43,6 @@ import lombok.RequiredArgsConstructor;
 */
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class RoleService {
 
 	private final RoleRepository repository;
@@ -81,6 +80,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage create(RoleRequestDTO input, Map<String, Object> searchKeys) {
 		searchKeys.put("roleCd", input.getRoleCd());
 		List<Role> list = repository.findAll(CommonSpecification.searchCondition(searchKeys));
@@ -114,6 +114,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage update(String method, RoleRequestDTO input, Map<String, Object> searchKeys) {
 		String message = "";
 		searchKeys.put("delYn", "N");
@@ -147,6 +148,7 @@ public class RoleService {
 	* @param searchKeys
 	* @return
 	*/
+	@Transactional
 	public ResponseMessage search(RoleRequestDTO input, Map<String, Object> searchKeys) {
 		List<Role> list = repository.findAll();
 

@@ -14,7 +14,7 @@ public class QUserResponseDTO extends ConstructorExpression<UserResponseDTO> {
     private static final long serialVersionUID = 845916781L;
 
     public QUserResponseDTO(com.querydsl.core.types.Expression<Integer> userSn, com.querydsl.core.types.Expression<String> userId, com.querydsl.core.types.Expression<String> pwd, com.querydsl.core.types.Expression<String> actvNm, com.querydsl.core.types.Expression<String> agreeYn, com.querydsl.core.types.Expression<String> rsPwdYn, com.querydsl.core.types.Expression<String> tmpPwd, com.querydsl.core.types.Expression<String> roleCd, com.querydsl.core.types.Expression<String> roleNm, com.querydsl.core.types.Expression<String> socialYn, com.querydsl.core.types.Expression<String> socialType, com.querydsl.core.types.Expression<String> accessToken, com.querydsl.core.types.Expression<String> createdDate, com.querydsl.core.types.Expression<String> modifiedDate) {
-        super(UserResponseDTO.class, new Class<?>[]{int.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class}, userSn, userId, pwd, actvNm, agreeYn, rsPwdYn, tmpPwd, roleCd, roleNm, socialYn, socialType, accessToken, createdDate, modifiedDate);
+        super(UserResponseDTO.class, new Class<?>[]{int.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class, String.class}, userSn, userId, pwd, actvNm, agreeYn, rsPwdYn, tmpPwd, roleCd, roleNm, socialYn, socialType, accessToken, createdDate, modifiedDate);
     }
 
 }
